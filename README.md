@@ -1,4 +1,4 @@
-# DevJ's Init Script
+# DevJ's dotfiles 
 Run
 ```sh
 bash <(curl -fsSL https://raw.githubusercontent.com/DeveloperJose/dotfiles/master/init.sh)

@@ -2,7 +2,6 @@ export PATH="$HOME/bin:$PATH"
 
 autoload -Uz compinit
 compinit
-eval "$(uv generate-shell-completion zsh)"
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
@@ -51,10 +50,12 @@ source ~/.powerlevel10k/powerlevel10k.zsh-theme
 # Load environment if needed
 [[ -f ~/.local/bin/env ]] && source ~/.local/bin/env
 
-alias ll='ls -lh'               # Long list format with human-readable file sizes
-alias gs='git status'            # Git status shortcut
-alias gc='git commit'            # Git commit shortcut
-alias gco='git checkout'         # Git checkout shortcut
-alias gst='git stash'            # Git stash shortcut
-alias update='sudo apt update && sudo apt upgrade'  # Update system
+alias ll='ls -lh'               
+alias gs='git status'          
+alias gc='git commit'         
+alias gco='git checkout'     
+alias gst='git stash'       
+alias update='sudo apt update && sudo apt upgrade'  
 alias lg='lazygit'
+alias ldir='ls -l | grep ^d'
+eval "$(uv generate-shell-completion zsh)"

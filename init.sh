@@ -81,6 +81,7 @@ if ! command -v chezmoi &>/dev/null; then
   sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply "$CHEZMOI_USER"
 else
   echo "chezmoi already installed. Applying dotfiles..."
+  chezmoi init --apply developerjose
   chezmoi apply
 fi
 

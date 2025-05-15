@@ -23,7 +23,7 @@ sudo apt update
 
 # === Core Tools ===
 echo "Installing essential tools..."
-for pkg in zsh unzip git curl python3-venv make gcc ripgrep xclip \
+for pkg in zsh unzip git curl python3-venv make gcc ripgrep xclip fzf \
            nodejs npm php php-mysql php7.4 php7.4-mysql; do
   install_if_missing "$pkg"
 done

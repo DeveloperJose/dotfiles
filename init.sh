@@ -31,7 +31,7 @@ done
 # === Zsh & Powerlevel10k ===
 if [ "$SHELL" != "$(which zsh)" ]; then
   echo "Setting Zsh as default shell..."
-  chsh -s "$(which zsh)"
+  sudo chsh -s "$(which zsh)"
 fi
 
 if [ ! -d ~/.powerlevel10k ]; then
@@ -85,44 +85,3 @@ else
 fi
 
 echo "✅ Initialization complete. You can re-run this script any time to sync state."
-
-
-#
-# sudo apt update 
-#
-# # My tools
-# sudo apt install -y zsh unzip git curl python3-venv
-#
-# # Neovim prereqs
-# sudo apt install -y make gcc ripgrep xclip 
-#
-# # AWBW tools
-# sudo apt install -y nodejs npm php php-mysql php7.4 php7.4-mysql
-#
-# # Set-up Zsh
-# chsh -s $(which zsh)
-# git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k
-#
-# # Set-up Lazygit
-# LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
-# curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-# tar xf lazygit.tar.gz lazygit
-# sudo install lazygit -D -t /usr/local/bin/
-#
-# # Set-up Python uv
-# curl -LsSf https://astral.sh/uv/install.sh | sh
-# echo 'eval "$(uv generate-shell-completion bash)"' >> ~/.bashrc
-# echo 'eval "$(uv generate-shell-completion zsh)"' >> ~/.zshrc
-#
-# # Now we install nvim
-# curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-# sudo rm -rf /opt/nvim-linux-x86_64
-# sudo mkdir -p /opt/nvim-linux-x86_64
-# sudo chmod a+rX /opt/nvim-linux-x86_64
-# sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-#
-# # make it available in /usr/local/bin, distro installs to /usr/bin
-# sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/
-#
-# # Chezmoi
-# sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply developerjose

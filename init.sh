@@ -24,7 +24,7 @@ sudo apt update
 # === Core Tools ===
 echo "Installing essential tools..."
 for pkg in zsh unzip git curl python3-venv make gcc ripgrep xclip fzf \
-           nodejs npm php php-mysql php7.4 php7.4-mysql; do
+           nodejs npm php php-mysql php7.4 php7.4-mysql build-essential pkg-config libssl-dev; do
   install_if_missing "$pkg"
 done
 
@@ -39,6 +39,14 @@ if [ ! -d ~/.powerlevel10k ]; then
   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k
 else
   echo "Powerlevel10k already installed."
+fi
+
+# === Rust ===
+if command -v rustc &>/dev/null; then
+  echo "Rust is installed."
+else
+  echo "Installing rust."
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 fi
 
 # === Lazygit ===

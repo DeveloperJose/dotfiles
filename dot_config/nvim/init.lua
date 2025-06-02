@@ -272,6 +272,7 @@ require('lazy').setup({
         'javascript',
         'typescript',
         'php',
+        'rust',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
@@ -290,6 +291,39 @@ require('lazy').setup({
     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = function()
+      require('treesitter-context').setup {
+        enable = true,
+        max_lines = 1, -- Show only the current function
+        multiline_threshold = 20, -- Fold long functions
+        trim_scope = 'outer', -- Only show the outermost context
+        mode = 'cursor', -- Show context based on cursor (not top line)
+        patterns = {
+          -- Default pattern list used for all filetypes if no override is set
+          default = {
+            'function',
+            'method',
+            'for',
+            'while',
+            'if',
+            'switch',
+            'case',
+          },
+          -- Override Rust to prioritize functions
+          rust = {
+            'function_item', -- Rust-specific Treesitter node for functions
+            'impl_item',
+            'struct_item',
+            'enum_item',
+            'mod_item',
+          },
+        },
+      }
+    end,
   },
 }, {
   ui = {

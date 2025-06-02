@@ -5,11 +5,18 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local lint = require 'lint'
+
+      local phpstan = lint.linters.phpstan
+
+      -- https://github.com/mfussenegger/nvim-lint/blob/master/lua/lint/linters/phpstan.lua
+      phpstan.cmd = vim.fn.getcwd() .. '/compose/php7.4/vendor/bin/phpstan'
+
       lint.linters_by_ft = {
         php = { 'phpstan' },
         python = { 'ruff' },
         typescript = { 'eslint_d' },
         javascript = { 'eslint_d' },
+        bash = { 'shellcheck' },
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,

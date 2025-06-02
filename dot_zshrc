@@ -1,7 +1,7 @@
 export PATH="$HOME/bin:$PATH"
 
 autoload -Uz compinit
-compinit
+compinit -i
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then

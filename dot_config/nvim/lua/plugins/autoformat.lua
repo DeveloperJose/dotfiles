@@ -94,11 +94,30 @@ return {
         python = { 'ruff' },
         javascript = { 'prettierd' },
         typescript = { 'prettierd' },
+        yaml = { 'prettierd' },
+        json = { 'prettierd' },
+        bash = { 'shfmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      },
+      formatters = {
+        php_cs_fixer = {
+          command = '/usr/bin/php7.4',
+          args = {
+            vim.fn.expand '~/.local/share/nvim/mason/packages/php-cs-fixer/php-cs-fixer.phar',
+            'fix',
+            [[--rules={"@PSR12": true, "visibility_required": false}]],
+            '--path-mode=override',
+            '--quiet',
+            '--using-cache=no',
+            '--no-interaction',
+            '$FILENAME',
+          },
+          stdin = false,
+        },
       },
     },
   },

@@ -216,6 +216,8 @@ return {
           },
         },
         ts_ls = {},
+        rust_analyzer = {},
+        bashls = {},
       }
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
@@ -226,6 +228,9 @@ return {
         'eslint_d', -- JS/TS Linter
         'prettierd', -- JS/TS Formatter
         'ruff', -- Python Formatter and Linter
+        'shfmt', -- Shell Linter
+        'shellcheck', -- Shell Formatter
+        --'rust-analyzer',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

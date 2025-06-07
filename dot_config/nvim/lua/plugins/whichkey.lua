@@ -8,6 +8,9 @@ return { -- Useful plugin to show you pending keybinds.
       { '<leader>s', group = '[S]earch' },
       { '<leader>t', group = '[T]oggle' },
       { '<leader>h', group = '[H]arpoon' },
+      { '<leader>q', group = '[Q]uickfix' },
+      { '<leader>f', group = '[F]ormat' },
+      { '<leader>n', group = '[N]ew AKA generate' },
       { 'gr', group = 'LSP' },
     },
 

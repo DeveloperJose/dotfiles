@@ -50,12 +50,18 @@ source ~/.powerlevel10k/powerlevel10k.zsh-theme
 # Load environment if needed
 [[ -f ~/.local/bin/env ]] && source ~/.local/bin/env
 
+ldir() {
+  local dir="${1:-.}"
+  ls -l "$dir" | grep ^d
+}
+
 alias ll='ls -lh'               
 alias gs='git status'          
 alias gc='git commit'         
 alias gco='git checkout'     
 alias gst='git stash'       
+alias gd='git diff'
+alias gdd='ddiff = -c diff.external=difft diff'
 alias update='sudo apt update && sudo apt upgrade'  
 alias lg='lazygit'
-alias ldir='ls -l | grep ^d'
 eval "$(uv generate-shell-completion zsh)"

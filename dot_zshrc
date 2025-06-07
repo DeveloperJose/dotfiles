@@ -61,7 +61,7 @@ alias gc='git commit'
 alias gco='git checkout'     
 alias gst='git stash'       
 alias gd='git diff'
-alias gdd='git diff -c diff.external=difft diff'
+alias gdd='git -c diff.external=difft diff'
 alias update='sudo apt update && sudo apt upgrade'  
 alias lg='lazygit'
 eval "$(uv generate-shell-completion zsh)"

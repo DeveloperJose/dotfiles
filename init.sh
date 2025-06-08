@@ -24,7 +24,9 @@ sudo apt update
 # === Core Tools ===
 echo "Installing essential tools..."
 for pkg in zsh unzip git curl python3-venv make gcc ripgrep xclip fzf \
-           nodejs npm php php-mysql php7.4 php7.4-mysql build-essential pkg-config libssl-dev; do
+  nodejs npm php php-mysql php7.4 php7.4-mysql \
+  build-essential pkg-config libssl-dev \
+  lnav ccze; do
   install_if_missing "$pkg"
 done
 
@@ -52,7 +54,7 @@ fi
 # === Lazygit ===
 if ! command -v lazygit &>/dev/null; then
   echo "Installing Lazygit..."
-  LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \
+  LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" |
     grep -Po '"tag_name": *"v\K[^"]*')
   curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
   tar xf lazygit.tar.gz lazygit

@@ -1,3 +1,4 @@
+#!/bin/zsh
 export PATH="$HOME/bin:$PATH"
 
 autoload -Uz compinit
@@ -38,7 +39,7 @@ zinit wait lucid light-mode for \
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 # Load Powerlevel10k theme
@@ -51,17 +52,40 @@ source ~/.powerlevel10k/powerlevel10k.zsh-theme
 [[ -f ~/.local/bin/env ]] && source ~/.local/bin/env
 
 ldir() {
-  local dir="${1:-.}"
-  ls -l "$dir" | grep ^d
+    local dir="${1:-.}"
+    ls -l "$dir" | grep ^d
 }
 
-alias ll='ls -lh'               
-alias gs='git status'          
-alias gc='git commit'         
-alias gco='git checkout'     
-alias gst='git stash'       
+tmux_awbw() {
+    if tmux has-session -t awbw 2>/dev/null; then
+        tmux kill-session -t awbw
+    fi
+    tmux new-session -d -s awbw -n nvim -c ~/local-debian/awbw
+    tmux new-window -t awbw:2 -n shell -c ~/local-debian/awbw
+
+    tmux new-window -t awbw:3 -n rust -c ~/local-debian/awbw
+    tmux send-keys -t awbw:3 'docker compose up rust | ccze -A' C-m
+
+    tmux new-window -t awbw:4 -n php -c ~/local-debian/awbw
+    tmux send-keys -t awbw:4 'logphp' C-m
+
+    tmux new-window -t awbw:9 -n terrain -c ~/local-debian/awbw/public_html/terrain
+    tmux attach-session -t awbw
+
+    # Meanwhile, create or attach to awbw-music session separately
+    if ! tmux has-session -t awbw-music 2>/dev/null; then
+        tmux new-session -d -s awbw-music
+    fi
+}
+
+alias ll='ls -lh'
+alias gs='git status'
+alias gc='git commit'
+alias gco='git checkout'
+alias gst='git stash'
 alias gd='git diff'
 alias gdd='git -c diff.external=difft diff'
-alias update='sudo apt update && sudo apt upgrade'  
+alias update='sudo apt update && sudo apt upgrade'
 alias lg='lazygit'
+alias logphp='docker exec -it awbw-app sh -c "tail -F /var/log/php_errors.log" | ccze -A'
 eval "$(uv generate-shell-completion zsh)"

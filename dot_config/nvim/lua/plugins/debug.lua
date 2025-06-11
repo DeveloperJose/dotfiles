@@ -70,11 +70,10 @@ return {
     {
       '<leader>dc',
       function()
-        require('dap').continue();
+        require('dap').continue()
       end,
       desc = 'Debug (Continue)',
-
-    }
+    },
   },
   config = function()
     local dap = require 'dap'

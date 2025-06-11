@@ -20,6 +20,7 @@ return {
         typescript = { 'eslint_d' },
         javascript = { 'eslint_d' },
         bash = { 'shellcheck' },
+        sh = { 'shellcheck' },
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,

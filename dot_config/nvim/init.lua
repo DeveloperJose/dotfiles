@@ -6,7 +6,7 @@ vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 
 -- Default to formatter only applying to modified lines
-vim.g.format_modifications_only = false
+-- vim.g.format_modifications_only = false
 
 -- Disable jumping by LSP in insert mode
 vim.api.nvim_set_keymap('i', '<Tab>', '<Tab>', { noremap = true })
@@ -39,28 +39,48 @@ vim.opt.mouse = 'a'
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
 
+vim.g.clipboard = {
+  name = 'noop',
+  copy = {
+    ['*'] = '',
+    ['+'] = '',
+  },
+  paste = {
+    ['*'] = '',
+    ['+'] = '',
+  },
+  cache_enabled = false,
+}
+vim.api.nvim_create_autocmd('TextYankPost', {
+  callback = function()
+    vim.schedule(function()
+      vim.fn.system({ 'win32yank.exe', '-i' }, vim.fn.getreg '"')
+    end)
+  end,
+})
+
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
-
-  if vim.fn.has 'wsl' == 1 then
-    vim.g.clipboard = {
-      name = 'WslClipboard',
-      copy = {
-        ['+'] = 'clip.exe',
-        ['*'] = 'clip.exe',
-      },
-      paste = {
-        ['+'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-        ['*'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-      },
-      cache_enabled = 0,
-    }
-  end
-end)
+-- vim.schedule(function()
+--   vim.opt.clipboard = 'unnamedplus'
+--
+--   if vim.fn.has 'wsl' == 1 then
+--     vim.g.clipboard = {
+--       name = 'WslClipboard',
+--       copy = {
+--         ['+'] = 'clip.exe',
+--         ['*'] = 'clip.exe',
+--       },
+--       paste = {
+--         ['+'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+--         ['*'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+--       },
+--       cache_enabled = 0,
+--     }
+--   end
+-- end)
 
 -- Enable break indent
 vim.opt.breakindent = true

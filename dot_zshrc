@@ -88,4 +88,5 @@ alias gdd='git -c diff.external=difft diff'
 alias update='sudo apt update && sudo apt upgrade'
 alias lg='lazygit'
 alias logphp='docker exec -it awbw-app sh -c "tail -F /var/log/php_errors.log" | ccze -A'
+alias chadd='chezmoi re-add'
 eval "$(uv generate-shell-completion zsh)"

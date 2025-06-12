@@ -89,5 +89,3 @@ alias update='sudo apt update && sudo apt upgrade'
 alias lg='lazygit'
 alias logphp='docker exec -it awbw-app sh -c "tail -F /var/log/php_errors.log" | ccze -A'
 eval "$(uv generate-shell-completion zsh)"
-
-export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0

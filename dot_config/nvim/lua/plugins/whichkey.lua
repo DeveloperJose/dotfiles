@@ -10,7 +10,7 @@ return { -- Useful plugin to show you pending keybinds.
       { '<leader>h', group = '[H]arpoon' },
       { '<leader>q', group = '[Q]uickfix' },
       { '<leader>f', group = '[F]ormat' },
-      { '<leader>n', group = '[N]ew AKA generate' },
+      { '<leader>n', group = '[N]ew Code' },
       { 'gr', group = 'LSP' },
     },
 

@@ -1,4 +1,16 @@
 return {
+  {
+    'micangl/cmp-vimtex',
+    ft = 'tex',
+    config = function()
+      require('cmp_vimtex').setup {}
+    end,
+  },
+  {
+    'saghen/blink.compat',
+    version = '*',
+    opts = { impersonate_nvim_cmp = false },
+  },
   { -- Autocompletion
     'saghen/blink.cmp',
     event = 'VimEnter',
@@ -83,9 +95,14 @@ return {
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'lsp', 'path', 'snippets', 'lazydev', 'vimtex' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          vimtex = {
+            name = 'vimtex',
+            module = 'blink.compat.source',
+            score_offset = 3,
+          },
         },
       },
 
@@ -103,5 +120,6 @@ return {
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },
     },
+    opts_extend = { 'sources.default' },
   },
 }

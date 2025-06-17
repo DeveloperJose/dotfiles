@@ -99,6 +99,7 @@ return {
         bash = { 'shfmt' },
         sh = { 'shfmt' },
         zsh = { 'beautysh' },
+        tex = { 'latexindent' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --

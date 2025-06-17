@@ -78,6 +78,15 @@ tmux_awbw() {
     fi
 }
 
+tmux_phd() {
+    if tmux has-session -t phd 2>/dev/null; then
+        tmux kill-session -t phd
+    fi
+    tmux new-session -d -s phd -n nvim -c ~/local-debian/dissertation/
+    tmux new-window -t phd:2 -n shell -c ~/local-debian/dissertation/
+    tmux attach-session -t phd
+}
+
 alias ll='ls -lh'
 alias gs='git status'
 alias gc='git commit'

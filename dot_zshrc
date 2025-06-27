@@ -101,3 +101,11 @@ alias lg='lazygit'
 alias logphp='docker exec -it awbw-app sh -c "tail -F /var/log/php_errors.log" | ccze -A'
 alias chadd='chezmoi re-add'
 eval "$(uv generate-shell-completion zsh)"
+
+# pnpm
+export PNPM_HOME="/home/devj/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

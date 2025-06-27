@@ -245,7 +245,7 @@ require('lazy').setup({
           line_up = '',
         },
       }
-      require('mini.indentscope').setup()
+      -- require('mini.indentscope').setup()
     end,
   },
   { -- Highlight, edit, and navigate code

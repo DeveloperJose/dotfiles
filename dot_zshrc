@@ -72,10 +72,14 @@ tmux_awbw() {
     tmux new-window -t awbw:9 -n terrain -c ~/local-debian/awbw/public_html/terrain
     tmux attach-session -t awbw
 
+}
+
+tmux_music() {
     # Meanwhile, create or attach to awbw-music session separately
-    if ! tmux has-session -t awbw-music 2>/dev/null; then
-        tmux new-session -d -s awbw-music
+    if ! tmux has-session -t music 2>/dev/null; then
+        tmux new-session -d -s music
     fi
+    tmux attach-session -t music
 }
 
 tmux_phd() {
@@ -105,7 +109,7 @@ eval "$(uv generate-shell-completion zsh)"
 # pnpm
 export PNPM_HOME="/home/devj/.local/share/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+    *":$PNPM_HOME:"*) ;;
+    *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end

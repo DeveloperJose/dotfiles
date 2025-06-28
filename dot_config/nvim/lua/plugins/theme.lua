@@ -19,6 +19,22 @@ return {
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       vim.cmd.colorscheme 'tokyonight-night'
 
+      for _, group in ipairs(vim.fn.getcompletion('@lsp.type.', 'highlight')) do
+        vim.api.nvim_set_hl(0, group, { link = 'Normal' })
+      end
+
+      -- for _, group in ipairs {
+      --   'typescriptAsyncFuncKeyword',
+      --   'typescriptFuncKeyword',
+      --   'typescriptVariable',
+      --   'typescriptFuncName',
+      --   'typescriptTypeReference',
+      --   'typescriptArraysMethod',
+      --   'typescriptHeadersMethod',
+      -- } do
+      --   vim.api.nvim_set_hl(0, group, { link = 'Normal' })
+      -- end
+
       vim.api.nvim_set_hl(0, 'ColorColumn', { bg = '#2e2e2e' })
       vim.o.colorcolumn = '120'
     end,

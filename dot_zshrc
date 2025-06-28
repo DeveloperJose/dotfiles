@@ -75,10 +75,16 @@ tmux_awbw() {
 }
 
 tmux_music() {
-    # Meanwhile, create or attach to awbw-music session separately
-    if ! tmux has-session -t music 2>/dev/null; then
-        tmux new-session -d -s music
+    if tmux has-session -t music 2>/dev/null; then
+        tmux kill-session -t music
     fi
+
+    tmux new-session -d -s music -n nvim -c ~/local-debian/scripts
+    tmux new-window -t music:2 -n shell -c ~/local-debian/scripts
+
+    tmux new-window -t music:3 -n watch -c ~/local-debian/scripts
+    tmux send-keys -t music:3 'pnpm watch:dev' C-m
+
     tmux attach-session -t music
 }
 
@@ -90,8 +96,7 @@ tmux_phd() {
     tmux new-window -t phd:2 -n shell -c ~/local-debian/dissertation/
     tmux attach-session -t phd
 }
-
-export TERM=xterm-256color
+export TERM=screen-256color
 
 alias ll='ls -lh'
 alias gs='git status'

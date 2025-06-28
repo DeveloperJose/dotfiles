@@ -242,9 +242,9 @@ return {
       -- define a custom server config that's unavailable on nvim-lspconfig.
       for server, config in pairs(vim.tbl_extend('keep', servers.mason, servers.others)) do
         if not vim.tbl_isempty(config) then
-          config.on_init = function(client)
-            client.server_capabilities.semanticTokensProvider = nil
-          end
+          -- config.on_init = function(client)
+          --   client.server_capabilities.semanticTokensProvider = nil
+          -- end
           vim.lsp.config(server, config)
         end
       end

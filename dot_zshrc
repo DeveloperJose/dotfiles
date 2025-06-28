@@ -1,9 +1,6 @@
 #!/bin/zsh
 export PATH="$HOME/bin:$PATH"
 
-autoload -Uz compinit
-compinit -i
-
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
@@ -13,9 +10,25 @@ if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
         print -P "%F{160} The clone has failed.%f%b"
 fi
 
+autoload -Uz compinit
+compinit -i
+
 source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
+
+eval "$(uv generate-shell-completion zsh)"
+# Fix file completion for `uv run`, might be due to compinit
+# https://github.com/astral-sh/uv/issues/8432
+# Fix completions for uv run to autocomplete .py files
+_uv_run_mod() {
+    if [[ "$words[2]" == "run" && "$words[CURRENT]" != -* ]]; then
+        _arguments '*:filename:_files -g "*.py"'
+    else
+        _uv "$@"
+    fi
+}
+compdef _uv_run_mod uv
 
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
@@ -85,6 +98,8 @@ tmux_music() {
     tmux new-window -t music:3 -n watch -c ~/local-debian/scripts
     tmux send-keys -t music:3 'pnpm watch:dev' C-m
 
+    tmux new-window -t music:4 -n website -c ~/local-debian/website/
+
     tmux attach-session -t music
 }
 
@@ -109,7 +124,6 @@ alias update='sudo apt update && sudo apt upgrade'
 alias lg='lazygit'
 alias logphp='docker exec -it awbw-app sh -c "tail -F /var/log/php_errors.log" | ccze -A'
 alias chadd='chezmoi re-add'
-eval "$(uv generate-shell-completion zsh)"
 
 # pnpm
 export PNPM_HOME="/home/devj/.local/share/pnpm"

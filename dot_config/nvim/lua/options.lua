@@ -26,8 +26,8 @@ vim.o.tabstop = 4
 vim.o.softtabstop = 4
 
 -- don't use built-in syntax for TS
-vim.g.loaded_typescript = 1
-vim.g.loaded_typescriptreact = 1
+-- vim.g.loaded_typescript = 1
+-- vim.g.loaded_typescriptreact = 1
 
 -- use truecolor for ghostty
 vim.o.termguicolors = true

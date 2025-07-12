@@ -1,0 +1,23 @@
+return {
+  --   'pmizio/typescript-tools.nvim',
+  --   dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+  --   opts = {},
+  --   config = function()
+  --     require('typescript-tools').setup {
+  --       filetypes = {
+  --         'javascript',
+  --         'typescript',
+  --         'vue',
+  --       },
+  --       settings = {
+  --         tsserver_plugins = {
+  --           {
+  --             name = '@vue/typescript-plugin',
+  --             location = vim.fn.expand '$MASON/packages/vue-language-server/node_modules/@vue/language-server',
+  --             languages = { 'vue' },
+  --           },
+  --         },
+  --       },
+  --     }
+  --   end,
+}

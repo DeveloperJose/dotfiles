@@ -1,0 +1,1 @@
+return { 'sh', 'bash', 'zsh' }

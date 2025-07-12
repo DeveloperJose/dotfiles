@@ -1,3 +1,36 @@
+local function get_mason_lsp_configs()
+  local configs = {}
+  local files = vim.fn.globpath(vim.fn.stdpath 'config' .. '/lua/plugins/lsp/mason', '*.lua', false, true)
+
+  for _, file in ipairs(files) do
+    local name = vim.fn.fnamemodify(file, ':t:r')
+    local ok, config_or_err = pcall(require, 'plugins.lsp.mason.' .. name)
+    if ok and type(config_or_err) == 'table' then
+      if not config_or_err.disabled then
+        configs[name] = config_or_err
+      end
+    else
+      vim.notify(('Could not load LSP config "%s"\nReason: %s'):format(name, config_or_err), vim.log.levels.WARN)
+    end
+  end
+
+  return configs
+end
+
+local ensure_installed = {
+  'stylua', -- Used to format Lua code
+  'phpstan', -- PHP Linter
+  'php-cs-fixer', -- PHP Formatter
+  'php-debug-adapter', -- PHP DAP
+  'eslint_d', -- JS/TS Linter
+  'prettierd', -- JS/TS Formatter
+  'ruff', -- Python Formatter and Linter
+  'shfmt', -- Formatter (bash, sh)
+  'shellcheck', -- Linter (bash, sh)
+  'beautysh', -- Formatter (zsh)
+  'latexindent', -- Formatter (tex)
+}
+
 return {
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -29,11 +62,6 @@ return {
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
-          -- local client = vim.lsp.get_client_by_id(event.data.client_id)
-          -- if client then
-          --   client.server_capabilities.documentFormattingProvider = false
-          --   client.server_capabilities.documentRangeFormattingProvider = false
-          --
           -- In this case, we create a function that lets us more easily define mappings specific
           -- for LSP related items. It sets the mode, buffer and description for us each time.
           local map = function(keys, func, desc, mode)
@@ -89,11 +117,7 @@ return {
           ---@param bufnr? integer some lsp support methods only in specific files
           ---@return boolean
           local function client_supports_method(client, method, bufnr)
-            if vim.fn.has 'nvim-0.11' == 1 then
-              return client:supports_method(method, bufnr)
-            else
-              return client.supports_method(method, { bufnr = bufnr })
-            end
+            return client:supports_method(method, bufnr)
           end
 
           -- The following two autocommands are used to highlight references of the
@@ -166,94 +190,57 @@ return {
         },
       }
 
-      -- LSP servers and clients are able to communicate to each other what features they support.
-      --  By default, Neovim doesn't support everything that is in the LSP specification.
-      --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
-      --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
-      local servers = {
-        mason = {
-          lua_ls = {
-            settings = {
-              Lua = {
-                completion = {
-                  callSnippet = 'Replace',
-                },
-              },
-            },
-          },
+      -- Language servers can broadly be installed in the following ways:
+      --  1) via the mason package manager; or
+      --  2) via your system's package manager; or
+      --  3) via a release binary from a language server's repo that's accessible somewhere on your system.
 
-          -- ruff = {},
-          pyright = {},
-          -- intelephense = {
-          --   settings = {
-          --     environment = {
-          --       phpVersion = '5.6.0',
-          --     },
-          --   },
-          --   filetypes = { 'php', 'inc' },
-          -- },
-          phpactor = {
-            -- cmd = { '/home/developerjose/.local/share/nvim/phpactor/bin/phpactor', 'language-server' },
-            init_options = {
-              ['language_server_phpstan.enabled'] = true,
-              ['language_server_php_cs_fixer.enabled'] = false,
-              ['language_server.diagnostic_ignore_codes'] = {
-                'worse.docblock_missing_param',
-                'worse.docblock_missing_return_type',
-                'worse.missing_return_type',
-              },
-            },
-          },
-          ts_ls = {},
-          rust_analyzer = {},
-          bashls = { 'sh', 'bash', 'zsh' },
-          ['ltex-ls-plus'] = {
-            filetypes = { 'tex' },
-            settings = {
-              ltex = {
-                language = 'en-US',
-                diagnosticSeverity = 'information',
-                additionalRules = { enablePickyRules = true },
-              },
-            },
-          },
-        },
+      -- The servers table comprises of the following sub-tables:
+      -- 1. mason
+      -- 2. others
+      -- Both these tables have an identical structure of language server names as keys and
+      -- a table of language server configuration as values.
+      ---@class LspServersConfig
+      ---@field mason table<string, vim.lsp.Config>
+      ---@field others table<string, vim.lsp.Config>
+
+      local servers = {
+        --  Add any additional override configuration in any of the following tables. Available keys are:
+        --  - cmd (table): Override the default command used to start the server
+        --  - filetypes (table): Override the default list of associated filetypes for the server
+        --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
+        --  - settings (table): Override the default settings passed when initializing the server.
+        --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+        mason = {},
         others = {},
       }
-      local ensure_installed = vim.tbl_keys(servers.mason or {})
-      vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
-        'phpstan', -- PHP Linter
-        'php-cs-fixer', -- PHP Formatter
-        'php-debug-adapter', -- PHP DAP
-        'eslint_d', -- JS/TS Linter
-        'prettierd', -- JS/TS Formatter
-        'ruff', -- Python Formatter and Linter
-        'shfmt', -- Formatter (bash, sh)
-        'shellcheck', -- Linter (bash, sh)
-        'beautysh', -- Formatter (zsh)
-        'latexindent', -- Formatter (tex)
-      })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+
+      -- Get Mason LSP configs from ./lsp/mason folder
+      for name, config in pairs(get_mason_lsp_configs()) do
+        if not config.disabled then
+          servers.mason[name] = config
+        end
+      end
+
+      local ensure_installed_full = vim.list_extend(vim.tbl_keys(servers.mason or {}), ensure_installed)
+      require('mason-tool-installer').setup { ensure_installed = ensure_installed_full }
 
       -- Either merge all additional server configs from the `servers.mason` and `servers.others` tables
       -- to the default language server configs as provided by nvim-lspconfig or
       -- define a custom server config that's unavailable on nvim-lspconfig.
       for server, config in pairs(vim.tbl_extend('keep', servers.mason, servers.others)) do
-        if not vim.tbl_isempty(config) then
-          -- config.on_init = function(client)
-          --   client.server_capabilities.semanticTokensProvider = nil
-          -- end
-          vim.lsp.config(server, config)
-        end
+        vim.lsp.config(server, config)
       end
 
       require('mason-lspconfig').setup {
-        automatic_installation = false,
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_enable = true, -- automatically run vim.lsp.enable() for all servers that are installed via Mason
+        automatic_enable = false,
       }
+
+      -- Manually enable all LSPs installed via Mason, this way we can ignore the explicitly disabled ones
+      if not vim.tbl_isempty(servers.mason) then
+        vim.lsp.enable(vim.tbl_keys(servers.mason))
+      end
 
       -- Manually run vim.lsp.enable for all language servers that are *not* installed via Mason
       if not vim.tbl_isempty(servers.others) then

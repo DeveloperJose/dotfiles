@@ -77,15 +77,17 @@ tmux_awbw() {
     tmux new-session -d -s awbw -n nvim -c ~/local-debian/awbw
     tmux new-window -t awbw:2 -n shell -c ~/local-debian/awbw
 
-    tmux new-window -t awbw:3 -n rust -c ~/local-debian/awbw
-    tmux send-keys -t awbw:3 'docker compose up rust | ccze -A' C-m
+    tmux new-window -t awbw:3 -n vue -c ~/local-debian/awbw/frontend/
+    tmux send-keys -t awbw:3 'pnpm run dev' C-m
 
-    tmux new-window -t awbw:4 -n php -c ~/local-debian/awbw
-    tmux send-keys -t awbw:4 'logphp' C-m
+    tmux new-window -t awbw:8 -n rust -c ~/local-debian/awbw
+    tmux send-keys -t awbw:8 'docker compose up rust | ccze -A' C-m
+
+    # tmux new-window -t awbw:4 -n php -c ~/local-debian/awbw
+    # tmux send-keys -t awbw:4 'logphp' C-m
 
     tmux new-window -t awbw:9 -n terrain -c ~/local-debian/awbw/public_html/terrain
     tmux attach-session -t awbw
-
 }
 
 tmux_music() {

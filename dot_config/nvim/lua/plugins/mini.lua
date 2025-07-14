@@ -2,30 +2,51 @@
 return {
   'echasnovski/mini.nvim',
   config = function()
+    -- Icons
+    require('mini.icons').setup()
     -- Better Around/Inside textobjects
-    --
-    -- Examples:
-    --  - va)  - [V]isually select [A]round [)]paren
-    --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
-    --  - ci'  - [C]hange [I]nside [']quote
     require('mini.ai').setup { n_lines = 500 }
-
-    -- Add/delete/replace surroundings (brackets, quotes, etc.)
-    --
-    -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-    -- - sd'   - [S]urround [D]elete [']quotes
-    -- - sr)'  - [S]urround [R]eplace [)] [']
+    -- Surround actions
     require('mini.surround').setup()
+    -- Autopairs
+    require('mini.pairs').setup()
+    -- Move selection
+    require('mini.move').setup {
+      mappings = {
+        line_left = '',
+        line_right = '',
+        line_down = '',
+        line_up = '',
+      },
+    }
+    -- Visualize indent scope
+    require('mini.indentscope').setup()
+    -- Comments
+    require('mini.comment').setup()
+    -- Autocompletion and signature help
+    require('mini.completion').setup()
 
-    -- Simple and easy statusline.
-    --  You could remove this setup call if you don't like it,
-    --  and try some other statusline plugin
+    -- Tab and Shift-Tab to navigate completion popup menu
+    local imap_expr = function(lhs, rhs)
+      vim.keymap.set('i', lhs, rhs, { expr = true, silent = true })
+    end
+
+    imap_expr('<Tab>', [[pumvisible() ? "\<C-n>" : "\<Tab>"]])
+    imap_expr('<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]])
+
+    -- Custom Enter key: confirm completion with <C-y> if selected, else insert newline
+    _G.cr_action = function()
+      if vim.fn.complete_info()['selected'] ~= -1 then
+        return '\25' -- Ctrl-Y
+      end
+      return '\r'
+    end
+
+    vim.keymap.set('i', '<CR>', 'v:lua.cr_action()', { expr = true, silent = true })
+
+    -- Simple and easy statusline. We'll remove some sections I don't want to see from it
     local statusline = require 'mini.statusline'
-    -- set use_icons to true if you have a Nerd Font
 
-    -- You can configure sections in the statusline by overriding their
-    -- default behavior. For example, here we set the section for
-    -- cursor location to LINE:COLUMN
     ---@diagnostic disable-next-line: duplicate-set-field
     statusline.section_location = function()
       return ''
@@ -35,19 +56,6 @@ return {
     statusline.section_diff = function()
       return ''
     end
-
     statusline.setup { use_icons = vim.g.have_nerd_font }
-
-    -- ... and there is more!
-    --  Check out: https://github.com/echasnovski/mini.nvim
-    require('mini.move').setup {
-      mappings = {
-        line_left = '',
-        line_right = '',
-        line_down = '',
-        line_up = '',
-      },
-    }
-    require('mini.indentscope').setup()
   end,
 }

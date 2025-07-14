@@ -1,3 +1,6 @@
+-- local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- capabilities.textDocument.semanticTokens = nil -- disables semantic tokens safely
+
 ---@module "vim.lsp.client"
 ---@class vim.lsp.ClientConfig
 return {
@@ -18,6 +21,11 @@ return {
   },
   on_attach = function(client, bufnr)
     if vim.bo[bufnr].filetype == 'vue' then
+      client.server_capabilities.semanticTokensProvider = nil
+    end
+  end,
+  on_init = function(client)
+    if client.name == 'vtsls' then
       client.server_capabilities.semanticTokensProvider = nil
     end
   end,

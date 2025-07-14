@@ -23,7 +23,7 @@ local ensure_installed = {
   'php-cs-fixer', -- PHP Formatter
   'php-debug-adapter', -- PHP DAP
   'eslint_d', -- JS/TS Linter
-  'prettierd', -- JS/TS Formatter
+  'prettier', -- JS/TS Formatter
   'ruff', -- Python Formatter and Linter
   'shfmt', -- Formatter (bash, sh)
   'shellcheck', -- Linter (bash, sh)

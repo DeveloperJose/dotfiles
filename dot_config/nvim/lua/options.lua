@@ -1,6 +1,3 @@
--- Default to formatter only applying to modified lines
--- vim.g.format_modifications_only = false
-
 -- Disable jumping by LSP in insert mode
 vim.api.nvim_set_keymap('i', '<Tab>', '<Tab>', { noremap = true })
 
@@ -24,10 +21,6 @@ vim.o.expandtab = true
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4
 vim.o.softtabstop = 4
-
--- don't use built-in syntax for TS
--- vim.g.loaded_typescript = 1
--- vim.g.loaded_typescriptreact = 1
 
 -- use truecolor for ghostty
 vim.o.termguicolors = true

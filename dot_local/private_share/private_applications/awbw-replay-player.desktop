@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=AWBW Replay Player
+Exec=/home/devj/bin/AWBWReplayPlayer.AppImage
+Icon=application-default-icon
+Type=Application
+Categories=Game;Utility;
+Terminal=false

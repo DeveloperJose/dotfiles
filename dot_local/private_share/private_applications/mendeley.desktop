@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=AWBW Replay Player
+
+Icon=application-default-icon
+Type=Application
+Categories=Game;Utility;
+Terminal=false
+
+[Desktop Entry]
+Name=Mendeley Desktop
+Comment=Reference Manager and Academic Social Network
+Exec=/home/devj/bin/Mendeley.AppImage %U
+Icon=mendeleydesktop 
+Terminal=false
+Type=Application
+Categories=Office;Science;Education;
+StartupWMClass=MendeleyDesktop # Important for i3 to recognize the window

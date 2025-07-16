@@ -18,17 +18,17 @@ local function get_mason_lsp_configs()
 end
 
 local ensure_installed = {
-  'stylua', -- Used to format Lua code
-  'phpstan', -- PHP Linter
-  'php-cs-fixer', -- PHP Formatter
+  'stylua',            -- Used to format Lua code
+  'phpstan',           -- PHP Linter
+  'php-cs-fixer',      -- PHP Formatter
   'php-debug-adapter', -- PHP DAP
-  'eslint_d', -- JS/TS Linter
-  'prettier', -- JS/TS Formatter
-  'ruff', -- Python Formatter and Linter
-  'shfmt', -- Formatter (bash, sh)
-  'shellcheck', -- Linter (bash, sh)
-  'beautysh', -- Formatter (zsh)
-  'latexindent', -- Formatter (tex)
+  'eslint_d',          -- JS/TS Linter
+  'prettierd',         -- JS/TS Formatter
+  'ruff',              -- Python Formatter and Linter
+  'shfmt',             -- Formatter (bash, sh)
+  'shellcheck',        -- Linter (bash, sh)
+  'beautysh',          -- Formatter (zsh)
+  'latexindent',       -- Formatter (tex)
 }
 
 return {
@@ -54,7 +54,7 @@ return {
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',    opts = {} },
 
       'saghen/blink.cmp',
     },

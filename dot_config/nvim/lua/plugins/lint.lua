@@ -9,10 +9,9 @@ return {
     config = function()
       local lint = require 'lint'
 
-      local phpstan = lint.linters.phpstan
-
       -- https://github.com/mfussenegger/nvim-lint/blob/master/lua/lint/linters/phpstan.lua
-      phpstan.cmd = vim.fn.getcwd() .. '/compose/php7.4/vendor/bin/phpstan'
+      -- local phpstan = lint.linters.phpstan
+      -- phpstan.cmd = vim.fn.getcwd() .. '/compose/php7.4/vendor/bin/phpstan'
 
       lint.linters_by_ft = {
         php = { 'phpstan' },

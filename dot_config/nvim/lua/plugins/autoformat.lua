@@ -1,5 +1,5 @@
 -- Format modified lines capability
-local ignore_filetypes = { php = true }
+local ignore_filetypes = { php = true, typescript = false, javascript = true }
 local default_format_options = {
   async = true,
   timeout = 500,

@@ -77,17 +77,40 @@ tmux_awbw() {
     tmux new-session -d -s awbw -n nvim -c ~/local-debian/awbw
     tmux new-window -t awbw:2 -n shell -c ~/local-debian/awbw
 
-    tmux new-window -t awbw:3 -n vue -c ~/local-debian/awbw/frontend/
-    tmux send-keys -t awbw:3 'pnpm run dev' C-m
+    tmux new-window -t awbw:7 -n php -c ~/local-debian/awbw
+    tmux send-keys -t awbw:7 'docker compose up app | ccze -A' C-m
 
     tmux new-window -t awbw:8 -n rust -c ~/local-debian/awbw
     tmux send-keys -t awbw:8 'docker compose up rust | ccze -A' C-m
 
-    # tmux new-window -t awbw:4 -n php -c ~/local-debian/awbw
-    # tmux send-keys -t awbw:4 'logphp' C-m
-
     tmux new-window -t awbw:9 -n terrain -c ~/local-debian/awbw/public_html/terrain
+
     tmux attach-session -t awbw
+}
+
+tmux_frontend() {
+    if tmux has-session -t frontend 2>/dev/null; then
+        tmux kill-session -t frontend
+    fi
+
+    tmux new-session -d -s frontend -n nvim -c ~/local-debian/nvim/frontend
+    tmux new-window -t frontend:2 -n shell -c ~/local-debian/nvim/frontend
+
+    tmux new-window -t frontend:3 -n vue -c ~/local-debian/awbw/frontend
+    tmux send-keys -t frontend:3 'pnpm run dev' C-m
+
+    tmux attach-session -t frontend
+}
+
+tmux_nvim() {
+    if tmux has-session -t nvim 2>/dev/null; then
+        tmux kill-session -t nvim
+    fi
+
+    tmux new-session -d -s nvim -n nvim -c ~/.config/nvim
+    tmux new-window -t nvim:2 -n shell -c ~/.config/nvim
+
+    tmux attach-session -t nvim
 }
 
 tmux_music() {
@@ -102,7 +125,6 @@ tmux_music() {
     tmux send-keys -t music:3 'pnpm watch:dev' C-m
 
     tmux new-window -t music:4 -n website -c ~/local-debian/website/
-
     tmux attach-session -t music
 }
 

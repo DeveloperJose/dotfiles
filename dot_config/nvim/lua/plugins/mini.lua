@@ -24,7 +24,29 @@ return {
     -- Comments
     require('mini.comment').setup()
     -- Autocompletion and signature help
-    require('mini.completion').setup()
+    local function in_string_or_comment()
+      local ts_utils = require 'nvim-treesitter.ts_utils'
+      local ok, node = pcall(ts_utils.get_node_at_cursor)
+      if not ok or not node then
+        return false
+      end
+
+      while node do
+        local t = node:type()
+        if t == 'string' or t == 'string_fragment' or t == 'comment' then
+          return true
+        end
+        node = node:parent()
+      end
+      return false
+    end
+
+    require('mini.completion').setup {
+      delay = { completion = 50, info = 2000, signature = 500 },
+      disable = function()
+        return in_string_or_comment()
+      end,
+    }
 
     -- Tab and Shift-Tab to navigate completion popup menu
     local imap_expr = function(lhs, rhs)

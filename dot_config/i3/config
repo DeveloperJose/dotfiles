@@ -210,5 +210,4 @@ exec --no-startup-id xrandr \
   --output HDMI-0 --rotate left --pos 0x0 \
   --output DP-0 --pos 1080x250
 
-exec --no-startup-id feh \
-  --bg-scale ~/Downloads/green-mountain.webp ~/Downloads/the-shooting-star.png ~/Downloads/forest.jpg
+exec --no-startup-id feh --bg-scale ~/Pictures/green-mountain.webp ~/Pictures/the-shooting-star.png ~/Pictures/forest.jpg

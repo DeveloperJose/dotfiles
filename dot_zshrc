@@ -93,8 +93,8 @@ tmux_frontend() {
         tmux kill-session -t frontend
     fi
 
-    tmux new-session -d -s frontend -n nvim -c ~/local-debian/nvim/frontend
-    tmux new-window -t frontend:2 -n shell -c ~/local-debian/nvim/frontend
+    tmux new-session -d -s frontend -n nvim -c ~/local-debian/awbw/frontend
+    tmux new-window -t frontend:2 -n shell -c ~/local-debian/awbw/frontend
 
     tmux new-window -t frontend:3 -n vue -c ~/local-debian/awbw/frontend
     tmux send-keys -t frontend:3 'pnpm run dev' C-m

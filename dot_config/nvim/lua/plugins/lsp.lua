@@ -20,6 +20,7 @@ end
 local ensure_installed = {
   'stylua',            -- Used to format Lua code
   'phpstan',           -- PHP Linter
+  'phpcs',             -- PHP Linter (2)
   'php-cs-fixer',      -- PHP Formatter
   'php-debug-adapter', -- PHP DAP
   'eslint_d',          -- JS/TS Linter

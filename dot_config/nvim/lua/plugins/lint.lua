@@ -14,6 +14,7 @@ return {
       -- phpstan.cmd = vim.fn.getcwd() .. '/compose/php7.4/vendor/bin/phpstan'
 
       lint.linters_by_ft = {
+        -- php = { 'phpstan', 'phpcs' },
         php = { 'phpstan' },
         python = { 'ruff' },
         typescript = { 'eslint_d' },

@@ -42,7 +42,7 @@ return {
     end
 
     require('mini.completion').setup {
-      delay = { completion = 50, info = 2000, signature = 500 },
+      delay = { completion = 500, info = 2000, signature = 500 },
       disable = function()
         return in_string_or_comment()
       end,

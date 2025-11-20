@@ -152,6 +152,7 @@ alias chadd='chezmoi re-add'
 alias i3='nvim ~/.config/i3/config'
 alias polybar='nvim ~/.config/polybar/config.ini'
 alias vpn='sudo openconnect --protocol=gp myvpn.utep.edu'
+alias updatelock='betterlockscreen -u ~/Pictures/Lockscreens/Horizontal.jpg -u ~/Pictures/Lockscreens/Vertical.jpg --fx dim --dim 10'
 
 # pnpm
 export PNPM_HOME="/home/devj/.local/share/pnpm"

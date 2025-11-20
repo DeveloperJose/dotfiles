@@ -145,10 +145,13 @@ alias gco='git checkout'
 alias gst='git stash'
 alias gd='git diff'
 alias gdd='git -c diff.external=difft diff'
-alias update='sudo apt update && sudo apt upgrade'
+alias update='sudo apt update && sudo apt upgrade -y && flatpak update -y'
 alias lg='lazygit'
 alias logphp='docker exec -it awbw-app sh -c "tail -F /var/log/php_errors.log" | ccze -A'
 alias chadd='chezmoi re-add'
+alias i3='nvim ~/.config/i3/config'
+alias polybar='nvim ~/.config/polybar/config.ini'
+alias vpn='sudo openconnect --protocol=gp myvpn.utep.edu'
 
 # pnpm
 export PNPM_HOME="/home/devj/.local/share/pnpm"

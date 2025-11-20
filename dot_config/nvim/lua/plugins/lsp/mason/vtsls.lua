@@ -4,6 +4,7 @@
 ---@module "vim.lsp.client"
 ---@class vim.lsp.ClientConfig
 return {
+  disabled = false,
   filetypes = { 'javascript', 'typescript', 'vue' },
   settings = {
     vtsls = {

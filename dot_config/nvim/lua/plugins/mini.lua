@@ -23,6 +23,7 @@ return {
     require('mini.indentscope').setup()
     -- Comments
     require('mini.comment').setup()
+
     -- Autocompletion and signature help
     local function in_string_or_comment()
       local ts_utils = require 'nvim-treesitter.ts_utils'
@@ -41,8 +42,29 @@ return {
       return false
     end
 
+    local function unique_items(items)
+      local seen = {}
+      local result = {}
+      for _, item in ipairs(items) do
+        if not seen[item.label] then
+          seen[item.label] = true
+          table.insert(result, item)
+        end
+      end
+      return result
+    end
+
+    local function process_items(items, base)
+      local filtered = unique_items(items)
+      -- You can also call default processing if you want sorting/fuzzy matching
+      return require('mini.completion').default_process_items(filtered, base)
+    end
+
     require('mini.completion').setup {
-      delay = { completion = 500, info = 2000, signature = 500 },
+      delay = { completion = 100, info = 2000, signature = 500 },
+      lsp_completion = {
+        process_items = process_items,
+      },
       disable = function()
         return in_string_or_comment()
       end,

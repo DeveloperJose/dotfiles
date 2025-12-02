@@ -168,3 +168,4 @@ export NVM_DIR="$HOME/.nvm"
 
 # opencode
 export PATH=/home/devj/.opencode/bin:$PATH
+export PATH="/snap/bin:$PATH"

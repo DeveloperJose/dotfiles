@@ -167,5 +167,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # opencode
-export PATH=/home/devj/.opencode/bin:$PATH
+export PATH="~/.opencode/bin:$PATH"
 export PATH="/snap/bin:$PATH"

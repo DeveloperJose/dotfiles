@@ -126,10 +126,12 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 workspace $ws1 output DP-0
 workspace $ws2 output DP-0
 workspace $ws3 output DP-0
+workspace $ws4 output DP-0
 
-workspace $ws4 output HDMI-0
 workspace $ws5 output HDMI-0
 workspace $ws6 output HDMI-0
+workspace $ws7 output HDMI-0
+workspace $ws8 output HDMI-0
 #
 # workspace $ws7 output HDMI-1-1
 # workspace $ws8 output HDMI-1-1
@@ -188,14 +190,16 @@ for_window [class="Gsimplecal"] floating enable
 
 # Main
 assign [class="com.mitchellh.ghostty"] 1
-assign [class="firefox"] 2
-assign [class="Code"] 3
-assign [class="DBeaver"] 3
-assign [class="Gimp"] 3
+# assign [class="firefox"] 2
+# assign [class="Code"] 3
+# assign [class="DBeaver"] 3
+# assign [class="Gimp"] 3
 
 # Vertical 
-assign [class="Google-chrome"] 4
-assign [class="discord"] 5
+# assign [class="Google-chrome"] 4
+# assign [class="discord"] 5
+assign [class="Zathura"] 6
+assign [class="Okular"] 6
 
 # Always start with numlock on
 exec_always --no-startup-id numlockx on

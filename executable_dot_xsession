@@ -1,8 +1,0 @@
-#!/bin/bash
-export PATH=$PATH:/usr/bin:/bin:/usr/local/bin
-export PATH="/snap/bin:$PATH"
-
-xrandr \
-    --output HDMI-0 --rotate left --mode 1920x1080 --rate 60 --pos 0x0 \
-    --output DP-0 --mode 2560x1440 --rate 100 --pos 1080x245 --primary
-exec i3

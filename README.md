@@ -4,8 +4,7 @@
 ```bash
 pacman -S ...
 
-git clone https://github.com/caelestia-dots/caelestia.git ~/.local/share/caelestia
-~/.local/share/caelestia/install.fish
+curl -fsSL https://install.danklinux.com | sh
 
 chezmoi init --apply git@github.com:DeveloperJose/dotfiles.git
 ```

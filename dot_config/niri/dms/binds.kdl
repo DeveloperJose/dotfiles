@@ -45,9 +45,13 @@ binds {
     Mod+Shift+Page_Down { move-workspace-down; }
     Mod+Shift+Page_Up { move-workspace-up; }
     Mod+Shift+U { move-workspace-down; }
+    Super+Shift+Up { move-workspace-up; }
+    Super+Shift+Down { move-workspace-down; }
     Mod+U { focus-workspace-down; }
     Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
     Mod+WheelScrollUp cooldown-ms=150 { focus-workspace-up; }
+    Super+Up { focus-workspace-up; }
+    Super+Down { focus-workspace-down; }
     Alt+Print { screenshot-window; }
     Alt+XF86Launch1 { screenshot-window; }
     Mod+BracketLeft { consume-or-expel-window-left; }

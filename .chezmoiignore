@@ -1,0 +1,6 @@
+**/.venv/**
+**/venv/**
+**/node_modules/**
+**/logs/**
+**/bun.lock
+

@@ -2,10 +2,33 @@
 // "/-" comments out the following node.
 // Check the wiki for a full description of the configuration:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Introduction
-include "arch-desktop.kdl"
-
 config-notification {
     disable-failed
+}
+debug {
+    honor-xdg-activation-with-invalid-serial
+    // We only need to specify the render device for the AMD iGPU.
+    // The NVIDIA GPU is handled by driver configuration and environment variables.
+    render-drm-device "/dev/dri/renderD128"
+}
+// Main
+output "PNP(WAM) YM32CQA-100Hz 0x00000001" {
+    mode "2560x1440@100.001"
+    scale 1
+    transform "normal"
+    position x=1080 y=240
+}
+
+// Vertical
+output "PNP(PLN) PLL2410W 0x01010101" {
+    mode "1920x1080@60"
+    scale 1
+    transform "90"
+    position x=0 y=0
+
+    layout {
+        default-column-width { proportion 1.0; }
+    }
 }
 
 gestures {
@@ -13,6 +36,31 @@ gestures {
         off
     }
 }
+
+// Input device configuration.
+// Find the full list of options on the wiki:
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Input
+input {
+    keyboard {
+        xkb {
+        }
+        numlock
+    }
+    touchpad {
+    }
+    mouse {
+        accel-speed 0.4
+        accel-profile "flat"
+    }
+    trackpoint {
+    }
+}
+// You can configure outputs by their name, which you can find
+// by running `niri msg outputs` while inside a niri instance.
+// The built-in laptop monitor is usually called "eDP-1".
+// Find more information on the wiki:
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs
+// Remember to uncomment the node by removing "/-"!
 
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
@@ -167,6 +215,10 @@ window-rule {
     draw-border-with-background false
 }
 window-rule {
+    match is-active=false
+    opacity 0.98
+}
+window-rule {
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
     match app-id="zoom"
     open-floating true
@@ -175,9 +227,6 @@ window-rule {
 window-rule {
     match app-id=r#"org.quickshell$"#
     open-floating true
-}
-debug {
-    honor-xdg-activation-with-invalid-serial
 }
 
 // Override to disable super+tab
@@ -195,5 +244,3 @@ include "dms/colors.kdl"
 include "dms/layout.kdl"
 include "dms/alttab.kdl"
 include "dms/binds.kdl"
-include "dms/outputs.kdl"
-include "dms/cursor.kdl"

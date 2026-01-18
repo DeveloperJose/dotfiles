@@ -1,4 +1,4 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR __fish_initialized:4300
-SETUVAR fish_user_paths:/home/devj/\x2eopencode/bin\x1e/sbin\x1e/usr/sbin\x1e/home/devj/\x2elocal/bin
+SETUVAR fish_user_paths:/home/devj/local\x2darch/ai/llama\x2ecpp/build/bin\x1e/home/devj/\x2enpm\x2dglobal/bin\x1e/home/devj/\x2eopencode/bin\x1e/sbin\x1e/usr/sbin\x1e/home/devj/\x2elocal/bin

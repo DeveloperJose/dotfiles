@@ -25,6 +25,7 @@ return {
         'javascript',
         'typescript',
         'vue',
+        'latex',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
@@ -50,10 +51,10 @@ return {
     config = function()
       require('treesitter-context').setup {
         enable = true,
-        max_lines = 1, -- Show only the current function
+        max_lines = 1,            -- Show only the current function
         multiline_threshold = 20, -- Fold long functions
-        trim_scope = 'outer', -- Only show the outermost context
-        mode = 'cursor', -- Show context based on cursor (not top line)
+        trim_scope = 'outer',     -- Only show the outermost context
+        mode = 'cursor',          -- Show context based on cursor (not top line)
         patterns = {
           -- Default pattern list used for all filetypes if no override is set
           default = {

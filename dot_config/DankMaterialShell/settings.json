@@ -15,7 +15,7 @@
   "nightModeEnabled": false,
   "animationSpeed": 1,
   "customAnimationDuration": 500,
-  "wallpaperFillMode": "Fit",
+  "wallpaperFillMode": "Fill",
   "blurredWallpaperLayer": false,
   "blurWallpaperOnOverview": true,
   "showLauncherButton": true,
@@ -90,10 +90,10 @@
       "width": 50
     }
   ],
-  "showWorkspaceIndex": false,
+  "showWorkspaceIndex": true,
   "showWorkspacePadding": false,
   "workspaceScrolling": false,
-  "showWorkspaceApps": false,
+  "showWorkspaceApps": true,
   "maxWorkspaceIcons": 3,
   "workspacesPerMonitor": true,
   "showOccupiedWorkspacesOnly": true,
@@ -112,18 +112,16 @@
   "lockDateFormat": "",
   "mediaSize": 1,
   "appLauncherViewMode": "list",
-  "spotlightModalViewMode": "list",
+  "spotlightModalViewMode": "grid",
   "sortAppsAlphabetically": false,
   "appLauncherGridColumns": 5,
   "spotlightCloseNiriOverview": true,
   "niriOverviewOverlayEnabled": true,
-  "weatherLocation": "New York, NY",
-  "weatherCoordinates": "40.7128,-74.0060",
   "useAutoLocation": true,
   "weatherEnabled": true,
   "networkPreference": "auto",
   "vpnLastConnected": "",
-  "iconTheme": "System Default",
+  "iconTheme": "Adwaita",
   "launcherLogoMode": "apps",
   "launcherLogoCustomPath": "",
   "launcherLogoColorOverride": "",
@@ -131,7 +129,7 @@
   "launcherLogoBrightness": 0.5,
   "launcherLogoContrast": 1,
   "launcherLogoSizeOffset": 0,
-  "fontFamily": "Inter Variable",
+  "fontFamily": "Adwaita Sans",
   "monoFontFamily": "FiraCode Nerd Font",
   "fontWeight": 400,
   "fontScale": 1,
@@ -189,7 +187,7 @@
   "lockScreenShowPowerActions": true,
   "enableFprint": false,
   "maxFprintTries": 15,
-  "lockScreenActiveMonitor": "all",
+  "lockScreenActiveMonitor": "DP-1",
   "lockScreenInactiveColor": "#000000",
   "hideBrightnessSlider": false,
   "notificationTimeoutLow": 5000,
@@ -247,10 +245,15 @@
         },
         {
           "id": "focusedWindow",
-          "enabled": true
+          "enabled": true,
+          "focusedWindowCompactMode": true
         }
       ],
       "centerWidgets": [
+        {
+          "id": "privacyIndicator",
+          "enabled": true
+        },
         {
           "id": "music",
           "enabled": true
@@ -262,6 +265,18 @@
         {
           "id": "weather",
           "enabled": true
+        },
+        {
+          "id": "displayManager",
+          "enabled": true
+        },
+        {
+          "id": "cpuUsage",
+          "enabled": true
+        },
+        {
+          "id": "memUsage",
+          "enabled": true
         }
       ],
       "rightWidgets": [
@@ -270,11 +285,11 @@
           "enabled": true
         },
         {
-          "id": "clipboard",
+          "id": "notificationButton",
           "enabled": true
         },
         {
-          "id": "notificationButton",
+          "id": "separator",
           "enabled": true
         },
         {
@@ -282,7 +297,7 @@
           "enabled": true
         },
         {
-          "id": "privacyIndicator",
+          "id": "clipboard",
           "enabled": true
         },
         {
@@ -318,5 +333,6 @@
       "maximizeDetection": true
     }
   ],
-  "configVersion": 2
+  "configVersion": 5,
+  "desktopWidgetInstances": []
 }

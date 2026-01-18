@@ -1,0 +1,134 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "opencode-lmstudio@latest",
+    "@tarquinen/opencode-dcp@latest",
+    "opencode-antigravity-auth@1.3.0"
+  ],
+  "provider": {
+    "lmstudio": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "local",
+      "options": {
+        //"baseURL": "http://127.0.0.1:1234/v1"
+        "baseURL": "http://127.0.0.1:8787/v1"
+      }
+    },
+  },
+  "mcp": {
+    "server_puppeteer_mcp": {
+      "type": "local",
+      "enabled": false,
+      "command": ["npx", "-y", "@modelcontextprotocol/server-puppeteer"],
+    },
+    "git_mcp": {
+      "type": "local",
+      "enabled": false,
+      "command": ["uvx", "mcp-server-git"],
+    },
+    "database_tools_mcp": {
+      "type": "local",
+      "enabled": false,
+      "command": [
+        "npx",
+        "-y",
+        "@toolbox-sdk/server",
+        "--tools-file",
+        "/home/devj/local-arch/ai/tools.yaml"
+      ],
+    },
+    "fetcher_mcp": {
+      "type": "local",
+      "enabled": false,
+      "command": ["npx", "-y", "fetcher-mcp"],
+    },
+    "sequential_thinking_mcp": {
+      "type": "local",
+      "enabled": false,
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+    },
+    "serena_mcp": {
+      "type": "local",
+      "enabled": false,
+      "command": [
+        "uvx",
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server",
+        "--open-web-dashboard",
+        "False",
+        "--project-from-cwd",
+        "--context",
+        "opencode"
+      ],
+    },
+    "cognee_mcp": {
+      "type": "local",
+      "enabled": false,
+      "command": [
+        "uv",
+        "--directory",
+        "/home/devj/local-arch/ai/cognee/cognee-mcp",
+        "run",
+        "python",
+        "src/server.py"
+      ],
+      "environment": {
+        "COGNEE_DATA_DIR": "/home/devj/local-arch/ai/cognee_data",
+        "LLM_API_KEY": "YOUR_OPENAI_API_KEY",
+        "GRAPH_DATABASE_PROVIDER": "lancedb"
+      }
+    },
+    "codanna_mcp": {
+      "type": "local",
+      "enabled": false,
+      "command": ["codanna", "serve", "--watch"],
+    },
+    "mcp-server-code-execution-mode": {
+      "type": "local",
+      "enabled": false,
+      "command": [
+        "uvx",
+        "--from",
+        "git+https://github.com/elusznik/mcp-server-code-execution-mode",
+        "mcp-server-code-execution-mode",
+        "run"
+      ],
+      "environment": {
+        "MCP_BRIDGE_RUNTIME": "docker"
+      }
+    }
+  },
+  "agent": {
+    "explore": {
+      "disable": false
+    },
+    "general": {
+      "disable": false
+    }
+  },
+  "tools": {
+    // "bash": false, // Execute shell commands in your project environment.
+    // "edit": false, // Modify existing files (write, patch, multiedit)
+    // "read": false, // Read file contents from your codebase.
+    // "grep": false, // Search file contents using regular expressions
+    // "glob": false, // Find files by pattern matching
+    // "list": false, // List files and directories
+    // "skill": false, // Load a skill (SKILL.md) into context
+    // "webfetch": false, // Fetch web content
+    // "question": false, // Ask the user questions during execution
+    // "todowrite": false, // Manage todo lists during coding sessions
+    // "todoread": false, // Read existing todo lists
+    // "task": false, // Allows spawning of subagents
+    // "lsp": false, // Experimental: LSP tools
+  },
+  "permission": {
+    "external_directory": "allow"
+  },
+  "command": {}
+}

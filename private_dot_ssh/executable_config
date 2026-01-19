@@ -2,30 +2,19 @@ Host frodo
   HostName frodo.utep.edu
   User jperez
 
-Host awbw-devj.duckdns.org
-  HostName awbw-devj.duckdns.org
-  User ubuntu
-  IdentityFile ~/.ssh/ssh-key-2025-04-29.key
-
-Host nas
-  HostName 192.168.68.113
-  User jperez
-  IdentityFile ~/.ssh/id_ed25519
-  IdentitiesOnly yes
-
 Host bilbo
   HostName bilbo.utep.edu
   User jperez
 
-Host awbw-vm
-  # HostName 150.136.182.1
+Host nas
+  HostName 192.168.68.113
+  User jperez
+  IdentityFile ~/.ssh/nas
+  IdentitiesOnly yes
+
+Host vps
   HostName 100.109.150.69
   Port 49222
   User ubuntu
-  IdentityFile ~/.ssh/awbw_vm
+  IdentityFile ~/.ssh/vps
   IdentitiesOnly yes
-
-Host recovery-vm
-	HostName 150.136.225.33
-	User opc
-	IdentityFile ~/.ssh/recovery_vm

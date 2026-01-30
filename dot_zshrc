@@ -1,0 +1,106 @@
+#!/bin/zsh
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+export QT_QPA_PLATFORM_PLUGIN_PATH=""
+
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
+fi
+
+autoload -Uz compinit
+compinit -i
+
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+eval "$(uv generate-shell-completion zsh)"
+# Fix file completion for `uv run`, might be due to compinit
+# https://github.com/astral-sh/uv/issues/8432
+# Fix completions for uv run to autocomplete .py files
+_uv_run_mod() {
+    if [[ "$words[2]" == "run" && "$words[CURRENT]" != -* ]]; then
+        _arguments '*:filename:_files -g "*.py"'
+    else
+        _uv "$@"
+    fi
+}
+compdef _uv_run_mod uv
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
+
+### End of Zinit's installer chunk
+zinit wait lucid light-mode for \
+    atinit"zicompinit; zicdreplay" \
+    zdharma-continuum/fast-syntax-highlighting \
+    atload"_zsh_autosuggest_start" \
+    zsh-users/zsh-autosuggestions \
+    blockf atpull'zinit creinstall -q .' \
+    zsh-users/zsh-completions
+
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Load Powerlevel10k theme
+source ~/.powerlevel10k/powerlevel10k.zsh-theme
+
+# Load Powerlevel10k config if available
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+# Load environment if needed
+[[ -f ~/.local/bin/env ]] && source ~/.local/bin/env
+
+ldir() {
+    local dir="${1:-.}"
+    ls -l "$dir" | grep ^d
+}
+
+export TERM=screen-256color
+alias ll='ls -lh'
+alias gs='git status'
+alias gc='git commit'
+alias gco='git checkout'
+alias gst='git stash'
+alias gd='git diff'
+alias gdd='git -c diff.external=difft diff'
+alias update='sudo apt update && sudo apt upgrade -y && flatpak update -y'
+alias lg='lazygit'
+alias logphp='docker exec -it awbw-app sh -c "tail -F /var/log/php_errors.log" | ccze -A'
+alias chadd='chezmoi re-add'
+alias i3='nvim ~/.config/i3/config'
+alias polybar='nvim ~/.config/polybar/config.ini'
+alias vpn='sudo openconnect --protocol=gp myvpn.utep.edu'
+alias updatelock='betterlockscreen -u ~/Pictures/Lockscreens/Horizontal.jpg -u ~/Pictures/Lockscreens/Vertical.jpg --fx dim --dim 10'
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# opencode
+export PATH=/home/ubuntu/.opencode/bin:$PATH
+
+# pnpm
+export PNPM_HOME="/home/ubuntu/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+# opencode
+export PATH=/home/ubuntu/.opencode/bin:$PATH

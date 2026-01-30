@@ -7,9 +7,9 @@ temperature: 0.15
 # maxSteps: 200
 tools:
     # Opencode Tools
-    bash: true # Execute shell commands in project environment
+    bash: false # Execute shell commands in project environment
     edit: false # Modify existing files (write, patch, multiedit)
-    read: false # Read file contents
+    read: true # Read file contents
     grep: false # Search file contents using patterns
     glob: false # Find files by pattern
     list: false # List directories and files

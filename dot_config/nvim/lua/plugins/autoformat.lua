@@ -1,5 +1,5 @@
 -- Format modified lines capability
-local ignore_filetypes = { php = true, typescript = false, javascript = true }
+local ignore_filetypes = { php = true, typescript = true, javascript = true, tsx = true }
 local default_format_options = {
   async = true,
   timeout = 500,
@@ -24,16 +24,16 @@ return {
     },
     opts = {
       notify_on_error = true,
-      format_on_save = function(bufnr)
-        if ignore_filetypes[vim.bo[bufnr].filetype] then
-          return nil
-        else
-          -- Async isn't supported on saving so force it to be false
-          return vim.tbl_deep_extend('force', {}, default_format_options, {
-            async = false,
-          })
-        end
-      end,
+      -- format_on_save = function(bufnr)
+      --   if ignore_filetypes[vim.bo[bufnr].filetype] then
+      --     return nil
+      --   else
+      --     -- Async isn't supported on saving so force it to be false
+      --     return vim.tbl_deep_extend('force', {}, default_format_options, {
+      --       async = false,
+      --     })
+      --   end
+      -- end,
       formatters_by_ft = {
         lua = { 'stylua' },
         php = { 'php_cs_fixer' },

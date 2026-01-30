@@ -1,5 +1,5 @@
 return {
-  disabled = false,
+  disabled = true,
   filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
   init_options = {
     plugins = {

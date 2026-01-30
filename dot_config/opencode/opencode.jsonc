@@ -1,20 +1,21 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "plugin": [
-    "opencode-lmstudio@latest",
-    "@tarquinen/opencode-dcp@latest",
-    "opencode-antigravity-auth@1.3.0"
+    // "@tarquinen/opencode-dcp@latest",
+    "opencode-antigravity-auth@1.4.1",
+    "opencode-plugin-llama.cpp@latest"
+    //"file:///home/devj/.config/opencode/plugins/opencode-context/index.ts"
   ],
   "provider": {
-    "lmstudio": {
+    "llama.cpp": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "local",
+      "name": "llama.cpp",
       "options": {
-        //"baseURL": "http://127.0.0.1:1234/v1"
-        "baseURL": "http://127.0.0.1:8787/v1"
+        "baseURL": "http://127.0.0.1:8080/v1"
       }
     },
   },
+  "formatter": false,
   "mcp": {
     "server_puppeteer_mcp": {
       "type": "local",

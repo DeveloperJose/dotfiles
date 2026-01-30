@@ -18,3 +18,9 @@ Host vps
   User ubuntu
   IdentityFile ~/.ssh/vps
   IdentitiesOnly yes
+
+Host github.com
+  HostName github.com
+  User developerjose
+  IdentityFile ~/.ssh/github
+  IdentitiesOnly yes

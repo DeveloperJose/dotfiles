@@ -5,7 +5,15 @@
 ---@class vim.lsp.ClientConfig
 return {
   disabled = false,
-  filetypes = { 'javascript', 'typescript', 'vue' },
+  filetypes = {
+    'javascript',
+    'javascriptreact',
+    'javascript.jsx',
+    'typescript',
+    'typescriptreact',
+    'typescript.tsx',
+    'vue',
+  },
   settings = {
     vtsls = {
       tsserver = {

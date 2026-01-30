@@ -3,6 +3,7 @@ return {
   dependencies = {
     'mason-org/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
+    'mxsdev/nvim-dap-vscode-js',
   },
   keys = {
     {
@@ -40,7 +41,6 @@ return {
       end,
       desc = 'Debug (Step Into)',
     },
-    -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
     {
       '<leader>du',
       function()
@@ -58,18 +58,32 @@ return {
   },
   config = function()
     local dap = require 'dap'
+    dap.set_log_level('TRACE')
 
-    require('mason-nvim-dap').setup {
-      automatic_installation = true,
+    -- local js_debug_path = vim.fn.expand '$MASON/packages/js-debug-adapter/js-debug'
+    local bun_dap_path = os.getenv('DATA') or (os.getenv('HOME') .. '/.local/share/nvim')
+    bun_dap_path = bun_dap_path .. '/bun-dap/adapter.js'
 
-      -- You can provide additional configuration to the handlers,
-      -- see mason-nvim-dap README for more information
-      handlers = {},
+    if vim.fn.filereadable(bun_dap_path) == 1 then
+      dap.adapters.bun = {
+        type = 'executable',
+        command = 'sh',
+        args = { '-c', 'node ' .. bun_dap_path .. ' 2> /tmp/bun-dap.log' },
+      }
 
-      ensure_installed = {
-        'php-debug-adapter',
-      },
-    }
+      local js_filetypes = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' }
+      for _, language in ipairs(js_filetypes) do
+        dap.configurations[language] = dap.configurations[language] or {}
+        table.insert(dap.configurations[language], {
+          type = 'bun',
+          request = 'attach',
+          name = 'Bun: Attach (Manual)',
+          url = function()
+            return vim.fn.input('Bun inspector WebSocket URL: ')
+          end,
+        })
+      end
+    end
 
     -- PHP Debugger
     dap.configurations.php = {

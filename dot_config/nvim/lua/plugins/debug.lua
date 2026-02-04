@@ -8,51 +8,37 @@ return {
   keys = {
     {
       '<leader>dl',
-      function()
-        require('dap').run_last()
-      end,
+      function() require('dap').run_last() end,
       desc = 'Debug (Run Last Config)',
     },
     {
       '<leader>dt',
-      function()
-        require('dap').toggle_breakpoint()
-      end,
+      function() require('dap').toggle_breakpoint() end,
       desc = 'Debug (Toggle Breakpoint)',
     },
     {
       '<leader>dr',
-      function()
-        require('dap').repl.open()
-      end,
+      function() require('dap').repl.open() end,
       desc = 'Debug (REPL)',
     },
     {
       '<leader>do',
-      function()
-        require('dap').step_over()
-      end,
+      function() require('dap').step_over() end,
       desc = 'Debug (Step Over)',
     },
     {
       '<leader>di',
-      function()
-        require('dap').step_into()
-      end,
+      function() require('dap').step_into() end,
       desc = 'Debug (Step Into)',
     },
     {
       '<leader>du',
-      function()
-        require('dapui').toggle()
-      end,
+      function() require('dapui').toggle() end,
       desc = 'Debug (See last session result)',
     },
     {
       '<leader>dc',
-      function()
-        require('dap').continue()
-      end,
+      function() require('dap').continue() end,
       desc = 'Debug (Continue)',
     },
   },

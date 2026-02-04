@@ -3,7 +3,7 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+    main = 'nvim-treesitter.config', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
       ensure_installed = {
@@ -47,35 +47,32 @@ return {
   },
   {
     'nvim-treesitter/nvim-treesitter-context',
-    dependencies = { 'nvim-treesitter/nvim-treesitter' },
-    config = function()
-      require('treesitter-context').setup {
-        enable = true,
-        max_lines = 1,            -- Show only the current function
-        multiline_threshold = 20, -- Fold long functions
-        trim_scope = 'outer',     -- Only show the outermost context
-        mode = 'cursor',          -- Show context based on cursor (not top line)
-        patterns = {
-          -- Default pattern list used for all filetypes if no override is set
-          default = {
-            'function',
-            'method',
-            'for',
-            'while',
-            'if',
-            'switch',
-            'case',
-          },
-          -- Override Rust to prioritize functions
-          rust = {
-            'function_item', -- Rust-specific Treesitter node for functions
-            'impl_item',
-            'struct_item',
-            'enum_item',
-            'mod_item',
-          },
+    opts = function(_, opts)
+      opts = opts or {}
+      opts.enable = true
+      opts.max_lines = 1
+      opts.multiline_threshold = 20
+      opts.trim_scope = 'outer'
+      opts.mode = 'cursor'
+      opts.patterns = {
+        default = {
+          'function',
+          'method',
+          'for',
+          'while',
+          'if',
+          'switch',
+          'case',
+        },
+        rust = {
+          'function_item',
+          'impl_item',
+          'struct_item',
+          'enum_item',
+          'mod_item',
         },
       }
+      return opts
     end,
   },
 }

@@ -1,7 +1,7 @@
 ---
 color: "#00FFFF"
 description: Coding agent with full tooling
-disable: false
+disable: true
 mode: all
 temperature: 0.15
 # maxSteps: 200

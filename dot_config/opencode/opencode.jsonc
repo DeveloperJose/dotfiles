@@ -2,7 +2,7 @@
   "$schema": "https://opencode.ai/config.json",
   "plugin": [
     // "@tarquinen/opencode-dcp@latest",
-    "opencode-antigravity-auth@1.4.3",
+    // "opencode-antigravity-auth@latest",
     "opencode-plugin-llama.cpp@latest"
     //"file:///home/devj/.config/opencode/plugins/opencode-context/index.ts"
   ],
@@ -54,7 +54,7 @@
     },
     "serena_mcp": {
       "type": "local",
-      "enabled": false,
+      "enabled": true,
       "command": [
         "uvx",
         "--from",
@@ -115,11 +115,11 @@
   },
   "tools": {
     // "bash": false, // Execute shell commands in your project environment.
-    // "edit": false, // Modify existing files (write, patch, multiedit)
-    // "read": false, // Read file contents from your codebase.
-    // "grep": false, // Search file contents using regular expressions
-    // "glob": false, // Find files by pattern matching
-    // "list": false, // List files and directories
+    "edit": false, // Modify existing files (write, patch, multiedit)
+    "read": false, // Read file contents from your codebase.
+    "grep": false, // Search file contents using regular expressions
+    "glob": false, // Find files by pattern matching
+    "list": false, // List files and directories
     // "skill": false, // Load a skill (SKILL.md) into context
     // "webfetch": false, // Fetch web content
     // "question": false, // Ask the user questions during execution

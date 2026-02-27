@@ -9,6 +9,7 @@ if status is-interactive
     fish_add_path $HOME/.npm-global/bin
     fish_add_path $HOME/local-arch/ai/llama.cpp/build/bin
 
+    set -gx DOCKER_BUILDKIT 1
     set -gx LD_LIBRARY_PATH $LD_LIBRARY_PATH /usr/local/cuda/lib64
     set -gx EDITOR nvim
     set -gx TERM screen-256color

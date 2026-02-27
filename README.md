@@ -3,11 +3,11 @@ This repo contains the dotfiles used for all my systems.
 
 # Arch Setup
 ```bash
-sudo pacman -S base-devel git chezmoi openssh nvim fish starship fastfetch \
+sudo pacman -S base-devel git chezmoi openssh nvim fish starship fastfetch lazygit tmux \
     make unzip wget curl \
     fd ripgrep \
     python nodejs npm luarocks tree-sitter-cli rustup \
-    docker docker-compose
+    docker docker-compose docker-buildx
 
 chsh -s /usr/bin/fish
 

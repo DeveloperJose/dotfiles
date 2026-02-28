@@ -1,5 +1,5 @@
 -- Format modified lines capability
-local ignore_filetypes = { php = true, typescript = true, javascript = true, tsx = true }
+-- local ignore_filetypes = { php = true, typescript = true, javascript = true, tsx = true }
 local default_format_options = {
   async = true,
   timeout = 500,
@@ -50,7 +50,7 @@ return {
       },
       formatters = {
         php_cs_fixer = {
-          command = '/usr/bin/php7.4',
+          command = 'php74',
           args = {
             vim.fn.expand '~/.local/share/nvim/mason/packages/php-cs-fixer/php-cs-fixer.phar',
             'fix',

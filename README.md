@@ -3,10 +3,10 @@ This repo contains the dotfiles used for all my systems.
 
 # Arch Setup
 ```bash
-sudo pacman -S base-devel git chezmoi openssh nvim fish starship fastfetch lazygit tmux \
+sudo pacman -S base-devel git chezmoi openssh nvim fish starship fastfetch lazygit tmux less \
     make unzip wget curl \
     fd ripgrep \
-    python nodejs npm luarocks tree-sitter-cli rustup \
+    bun python nodejs npm luarocks tree-sitter-cli rustup pnpm \
     docker docker-compose docker-buildx
 
 chsh -s /usr/bin/fish
@@ -18,7 +18,7 @@ git clone https://aur.archlinux.org/paru.git
 cd paru
 makepkg -si
 
-paru -S nvidia-container-toolkit
+paru -S nvidia-container-toolkit php74 php74-mysql php74-xml php74-curl php74-zip php74-json php74-cli
 ```
 
 # Window Manager Setup

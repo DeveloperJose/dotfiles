@@ -18,7 +18,7 @@ git clone https://aur.archlinux.org/paru.git
 cd paru
 makepkg -si
 
-paru -S nvidia-container-toolkit php74 php74-mysql php74-xml php74-curl php74-zip php74-json php74-cli php74-tokenizer
+paru -S nvidia-container-toolkit php74 php74-mysql php74-xml php74-curl php74-zip php74-json php74-cli php74-tokenizer php74-phar
 ```
 
 # Window Manager Setup

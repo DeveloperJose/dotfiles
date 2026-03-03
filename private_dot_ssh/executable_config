@@ -1,11 +1,3 @@
-Host frodo
-  HostName frodo.utep.edu
-  User jperez
-
-Host bilbo
-  HostName bilbo.utep.edu
-  User jperez
-
 Host nas
   HostName 192.168.68.113
   User jperez

@@ -54,7 +54,7 @@
     },
     "serena_mcp": {
       "type": "local",
-      "enabled": true,
+      "enabled": false,
       "command": [
         "uvx",
         "--from",

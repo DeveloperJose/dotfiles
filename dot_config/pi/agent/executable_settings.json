@@ -1,0 +1,10 @@
+{
+  "lastChangelogVersion": "0.55.4",
+  "defaultProvider": "google-gemini-cli",
+  "defaultModel": "gemini-2.5-flash",
+  "defaultThinkingLevel": "off",
+  "hideThinkingBlock": false,
+  "packages": [
+    "~/local-arch/ai/pi-mono/extensions/devj-suite"
+  ]
+}

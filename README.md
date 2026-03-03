@@ -7,7 +7,8 @@ sudo pacman -S base-devel git chezmoi openssh nvim fish starship fastfetch lazyg
     make unzip wget curl \
     fd ripgrep \
     bun python nodejs npm luarocks tree-sitter-cli rustup pnpm \
-    docker docker-compose docker-buildx
+    docker docker-compose docker-buildx \
+    ccache cmake cuda
 
 chsh -s /usr/bin/fish
 
@@ -18,7 +19,12 @@ git clone https://aur.archlinux.org/paru.git
 cd paru
 makepkg -si
 
-paru -S nvidia-container-toolkit php74 php74-mysql php74-xml php74-curl php74-zip php74-json php74-cli php74-tokenizer php74-phar
+paru -S nvidia-container-toolkit php74 php74-mysql php74-xml php74-curl php74-zip php74-json php74-cli php74-tokenizer php74-phar php74-mbstring php74-simplexml php74-iconv php74-dom php74-xmlwriter
+
+wget https://raw.githubusercontent.com/composer/getcomposer.org/f3108f64b4e1c1ce6eb462b159956461592b3e3e/web/installer -O - -q | php74 -- --quiet
+
+php74 composer.phar install
+sudo npm install -g tree-sitter-cli
 ```
 
 # Window Manager Setup

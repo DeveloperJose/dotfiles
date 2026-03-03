@@ -1,5 +1,7 @@
 return {
+  cmd = { '/sbin/php74', vim.fn.expand '$MASON/bin/phpactor' },
   init_options = {
+
     ['language_server_phpstan.enabled'] = false,
     ['language_server_php_cs_fixer.enabled'] = false,
     ['language_server_psalm.enabled'] = false,

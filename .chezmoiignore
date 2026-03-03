@@ -3,4 +3,8 @@
 **/node_modules/**
 **/logs/**
 **/bun.lock
-
+**/pi/agent/sessions/**
+**/auth**
+**auth**
+**/.env
+**.env

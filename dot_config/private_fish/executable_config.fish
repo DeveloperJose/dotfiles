@@ -8,6 +8,7 @@ if status is-interactive
     fish_add_path /usr/local/cuda/bin
     fish_add_path $HOME/.npm-global/bin
     fish_add_path $HOME/local-arch/ai/llama.cpp/build/bin
+    fish_add_path /usr/lib/node_modules/.bin
 
     set -gx DOCKER_BUILDKIT 1
     set -gx LD_LIBRARY_PATH $LD_LIBRARY_PATH /usr/local/cuda/lib64

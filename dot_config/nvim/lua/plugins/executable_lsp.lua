@@ -39,6 +39,7 @@ return {
     dependencies = {
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       { 'mason-org/mason.nvim', opts = {} },
+      'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
@@ -149,9 +150,18 @@ return {
       -- manually via :Mason or added here with correct Mason package names.
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+      require('mason-lspconfig').setup {
+        handlers = {
+          function(server_name)
+            vim.lsp.config(server_name, {})
+          end,
+        },
+      }
+
       -- Either merge all additional server configs from the `servers.mason` and `servers.others` tables
       -- to the default language server configs as provided by nvim-lspconfig or
       -- define a custom server config that's unavailable on nvim-lspconfig.
+      --[[
       for server, config in pairs(vim.tbl_extend('keep', servers.mason, servers.others)) do
         vim.lsp.config(server, config)
       end
@@ -169,6 +179,7 @@ return {
           vim.lsp.enable(server)
         end
       end
+      --]]
 
       -- Special Lua Config, as recommended by neovim help docs
       vim.lsp.config('lua_ls', {

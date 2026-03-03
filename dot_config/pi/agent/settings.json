@@ -1,10 +1,7 @@
 {
   "lastChangelogVersion": "0.55.4",
-  "defaultProvider": "google-gemini-cli",
-  "defaultModel": "gemini-2.5-flash",
+  "defaultProvider": "llama.cpp",
+  "defaultModel": "unsloth/Qwen3.5-9B-GGUF:IQ4_XS",
   "defaultThinkingLevel": "off",
-  "hideThinkingBlock": false,
-  "packages": [
-    "~/local-arch/ai/pi-mono/extensions/devj-suite"
-  ]
+  "hideThinkingBlock": false
 }

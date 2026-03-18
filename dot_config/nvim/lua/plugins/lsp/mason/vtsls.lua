@@ -1,10 +1,12 @@
 -- local capabilities = vim.lsp.protocol.make_client_capabilities()
 -- capabilities.textDocument.semanticTokens = nil -- disables semantic tokens safely
 
+---@module 'lazy'
+---@type LazySpec
 ---@module "vim.lsp.client"
 ---@class vim.lsp.ClientConfig
+---@type LspServersConfig.mason
 return {
-  disabled = false,
   filetypes = {
     'javascript',
     'javascriptreact',

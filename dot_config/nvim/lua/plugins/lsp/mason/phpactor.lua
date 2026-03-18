@@ -1,3 +1,8 @@
+---@module 'lazy'
+---@type LazySpec
+---@module "vim.lsp.client"
+---@class vim.lsp.ClientConfig
+---@type LspServersConfig.mason
 return {
   cmd = { '/sbin/php74', vim.fn.expand '$MASON/bin/phpactor' },
   init_options = {

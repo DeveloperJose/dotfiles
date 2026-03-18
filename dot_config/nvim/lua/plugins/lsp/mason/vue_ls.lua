@@ -1,5 +1,8 @@
+---@module 'lazy'
+---@type LazySpec
 ---@module "vim.lsp.client"
 ---@class vim.lsp.ClientConfig
+---@type LspServersConfig.mason
 return {
   on_init = function(client)
     client.handlers['tsserver/request'] = function(_, result, context)

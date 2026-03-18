@@ -1,5 +1,10 @@
+---@module 'lazy'
+---@type LazySpec
+---@module "vim.lsp.client"
+---@class vim.lsp.ClientConfig
+---@type LspServersConfig.mason
 return {
-  disabled = false,
+  disabled = true,
   settings = {
     environment = {
       phpVersion = '5.6.0',

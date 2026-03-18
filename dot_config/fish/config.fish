@@ -14,6 +14,7 @@ if status is-interactive
     set -gx LD_LIBRARY_PATH $LD_LIBRARY_PATH /usr/local/cuda/lib64
     set -gx EDITOR nvim
     set -gx TERM screen-256color
+    set --erase DISPLAY
 
     # Added by LM Studio CLI (lms)
     set -gx PATH $PATH /home/devj/.lmstudio/bin

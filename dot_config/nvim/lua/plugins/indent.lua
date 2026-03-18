@@ -1,3 +1,5 @@
+---@module 'lazy'
+---@type LazySpec
 return {
   {
     -- Add indentation guides even on blank lines
@@ -5,6 +7,8 @@ return {
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help ibl`
     main = 'ibl',
+    ---@module 'ibl'
+    ---@type ibl.config
     opts = {},
   },
   -- Detect tabstop and shiftwidth automatically

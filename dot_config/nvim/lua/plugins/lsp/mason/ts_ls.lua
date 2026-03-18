@@ -1,5 +1,9 @@
+---@module 'lazy'
+---@type LazySpec
+---@module "vim.lsp.client"
+---@class vim.lsp.ClientConfig
+---@type LspServersConfig.mason
 return {
-  disabled = false,
   filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
   init_options = {
     plugins = {

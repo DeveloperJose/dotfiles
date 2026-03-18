@@ -1,80 +1,13 @@
--- Highlight, edit, and navigate code
-return {
-  {
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    main = 'nvim-treesitter.config', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = {
-        'bash',
-        'c',
-        'diff',
-        'lua',
-        'luadoc',
-        'markdown',
-        'markdown_inline',
-        'query',
-        'vim',
-        'vimdoc',
-        'python',
-        'php',
-        'rust',
-        'html',
-        'css',
-        'javascript',
-        'typescript',
-        'vue',
-        'latex',
-      },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby', 'php' },
-      },
-      indent = { enable = false, disable = { 'ruby', 'php' } },
+return { -- Highlight, edit, and navigate code
+  'nvim-treesitter/nvim-treesitter',
+  build = ':TSUpdate',
+  opts = {
+    ensure_installed = { 'bash', 'c', 'css', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'tsx', 'typescript', 'vim', 'vimdoc' },
+    auto_install = true,
+    highlight = {
+      enable = true,
+      use_languagetree = true,
     },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
-  },
-  {
-    'nvim-treesitter/nvim-treesitter-context',
-    opts = function(_, opts)
-      opts = opts or {}
-      opts.enable = true
-      opts.max_lines = 1
-      opts.multiline_threshold = 20
-      opts.trim_scope = 'outer'
-      opts.mode = 'cursor'
-      opts.patterns = {
-        default = {
-          'function',
-          'method',
-          'for',
-          'while',
-          'if',
-          'switch',
-          'case',
-        },
-        rust = {
-          'function_item',
-          'impl_item',
-          'struct_item',
-          'enum_item',
-          'mod_item',
-        },
-      }
-      return opts
-    end,
+    indent = { enable = true, disable = { 'python' } },
   },
 }
-
--- vim: ts=2 sts=2 sw=2 et

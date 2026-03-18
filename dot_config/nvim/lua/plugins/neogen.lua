@@ -1,7 +1,11 @@
+---@module 'lazy'
+---@type LazySpec
 return {
   'danymat/neogen',
   config = true,
   dependencies = 'nvim-treesitter/nvim-treesitter',
+  ---@module 'neogen'
+  ---@type NeogenConfig
   keys = {
     {
       '<leader>nf',

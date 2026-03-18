@@ -34,6 +34,7 @@ local check_external_reqs = function()
 end
 
 return {
+    ---@diagnostic disable-next-line: unused-local
   check = function()
     vim.health.start 'kickstart.nvim'
 

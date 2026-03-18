@@ -1,6 +1,9 @@
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>qd', vim.diagnostic.setloclist, { desc = 'Open [Q]uickfix [D]iagnostic list' })
 vim.keymap.set('n', '<leader>qf', vim.diagnostic.open_float, { desc = '[Q]uickfix diagnostic [f]loat' })
+
+---@module 'lazy'
+---@type LazySpec
 return {
 
   { -- Linting

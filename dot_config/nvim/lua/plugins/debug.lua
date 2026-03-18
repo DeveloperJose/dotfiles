@@ -1,3 +1,5 @@
+---@module 'lazy'
+---@type LazySpec
 return {
   'mfussenegger/nvim-dap',
   dependencies = {
@@ -44,10 +46,10 @@ return {
   },
   config = function()
     local dap = require 'dap'
-    dap.set_log_level('TRACE')
+    dap.set_log_level 'TRACE'
 
     -- local js_debug_path = vim.fn.expand '$MASON/packages/js-debug-adapter/js-debug'
-    local bun_dap_path = os.getenv('DATA') or (os.getenv('HOME') .. '/.local/share/nvim')
+    local bun_dap_path = os.getenv 'DATA' or (os.getenv 'HOME' .. '/.local/share/nvim')
     bun_dap_path = bun_dap_path .. '/bun-dap/adapter.js'
 
     if vim.fn.filereadable(bun_dap_path) == 1 then
@@ -64,9 +66,7 @@ return {
           type = 'bun',
           request = 'attach',
           name = 'Bun: Attach (Manual)',
-          url = function()
-            return vim.fn.input('Bun inspector WebSocket URL: ')
-          end,
+          url = function() return vim.fn.input 'Bun inspector WebSocket URL: ' end,
         })
       end
     end

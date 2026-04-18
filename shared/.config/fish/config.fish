@@ -18,18 +18,32 @@ if status is-interactive
     set -gx TERM screen-256color
     set --erase DISPLAY
 
-    # Added by LM Studio CLI (lms)
-    set -gx PATH $PATH /home/devj/.lmstudio/bin
-    # End of LM Studio CLI section
+    # --- SSH Agent ---
+    if not set -q SSH_AUTH_SOCK; or test -z "$SSH_AUTH_SOCK"
+        eval (ssh-agent -c)
+    end
+    for key in ~/.ssh/*
+        if test -f "$key"
+            and not string match -q "*.pub" "$key"
+            and not string match -q ".pub" (string sub -l 4 (basename "$key"))
+            and not string match -q "known_hosts*" "$key"
+            and not string match -q "config" "$key"
+            set -l key_fp (ssh-keygen -lf "$key" 2>/dev/null | awk '{print $2}')
+            if not ssh-add -l 2>/dev/null | grep -q "$key_fp"
+                ssh-add "$key" 2>/dev/null
+            end
+        end
+    end
 
     # pnpm
     set -gx PNPM_HOME "/home/devj/.local/share/pnpm"
     if not string match -q -- $PNPM_HOME $PATH
         set -gx PATH "$PNPM_HOME" $PATH
     end
-
     # pnpm end
-    fastfetch
+
     starship init fish | source
+
+    fastfetch
 end
 

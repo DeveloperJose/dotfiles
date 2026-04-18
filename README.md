@@ -50,6 +50,6 @@ cd ~/dotfiles
 
 ### 2. Run the Bootstrap
 ```bash
-chmod +x install.sh
-./install.sh
+chmod +x sync.sh
+./sync.sh
 ```

@@ -1,10 +1,46 @@
-**/.venv/**
-**/venv/**
-**/node_modules/**
-**/logs/**
-**/bun.lock
+# ==============================================================================
+# DOTFILES .GITIGNORE
+# ==============================================================================
+
+# --- Secrets & Credentials ---
+# Never track environment variables or authentication tokens
+.env
+.env.*
+.auth
+**/auth
 **/pi/agent/sessions/**
-**/auth**
-**auth**
-**/.env
-**.env
+
+# --- Python & Machine Learning ---
+# Ignore local environments used for research
+**/venv/
+**/.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- JavaScript / TypeScript (Bun & Node) ---
+# Dependencies and lockfiles (usually kept local or regenerated)
+node_modules/
+bun.lock
+.bun-build/
+
+# --- Text Editor Debris (Neovim/Vim) ---
+# Swap files, undo history, and binary spell files
+*.swp
+*.swo
+undo/
+shared/.config/nvim/undo/
+shared/.config/nvim/spell/*.spl
+
+# --- System & OS Logs ---
+# Keep the repo clean of logs and OS-specific metadata
+*.log
+**/logs/
+.DS_Store
+.wget-hsts
+
+# --- Technical Stack Specifics ---
+# Local database or temporary build artifacts
+.cache/
+.npm/
+.nv/

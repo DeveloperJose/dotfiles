@@ -17,10 +17,6 @@ if status is-interactive
     set -gx TERM screen-256color
     set --erase DISPLAY
 
-    # Added by LM Studio CLI (lms)
-    set -gx PATH $PATH /home/devj/.lmstudio/bin
-    # End of LM Studio CLI section
-
     # --- SSH Agent ---
     if not set -q SSH_AUTH_SOCK; or test -z "$SSH_AUTH_SOCK"
         eval (ssh-agent -c)

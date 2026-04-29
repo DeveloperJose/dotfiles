@@ -54,7 +54,7 @@
     },
     "serena_mcp": {
       "type": "local",
-      "enabled": false,
+      "enabled": true,
       "command": [
         "uvx",
         "--from",
@@ -115,18 +115,18 @@
   },
   "tools": {
     // "bash": false, // Execute shell commands in your project environment.
-    // "edit": false, // Modify existing files (write, patch, multiedit)
-    // "read": false, // Read file contents from your codebase.
+    "edit": false, // Modify existing files (write, patch, multiedit)
+    "read": false, // Read file contents from your codebase.
     "grep": false, // Search file contents using regular expressions
     "glob": false, // Find files by pattern matching
     "list": false, // List files and directories
     // "skill": false, // Load a skill (SKILL.md) into context
-    "webfetch": false, // Fetch web content
-    "question": false, // Ask the user questions during execution
-    "todowrite": false, // Manage todo lists during coding sessions
-    "todoread": false, // Read existing todo lists
-    "task": false, // Allows spawning of subagents
-    "lsp": false, // Experimental: LSP tools
+    // "webfetch": false, // Fetch web content
+    // "question": false, // Ask the user questions during execution
+    // "todowrite": false, // Manage todo lists during coding sessions
+    // "todoread": false, // Read existing todo lists
+    // "task": false, // Allows spawning of subagents
+    // "lsp": false, // Experimental: LSP tools
   },
   "permission": {
     "bun run dev": "deny",

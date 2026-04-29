@@ -1,0 +1,42 @@
+{
+  "name": "@developerjose/opencode-context",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "bun build index.ts --outdir dist --target node",
+    "prettier": "prettier --write \"**/*.{js,ts,css}\""
+  },
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "plugin",
+    "context"
+  ],
+  "prettier": {
+    "semi": false,
+    "printWidth": 120
+  },
+  "author": "DeveloperJose",
+  "license": "MIT",
+  "packageManager": "pnpm@10.28.0",
+  "dependencies": {
+    "@opencode-ai/plugin": "^1.1.26",
+    "@opencode-ai/sdk": "^1.1.26",
+    "@types/node": "^25.0.9",
+    "prettier": "^3.8.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "eslint_d": "^14.3.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.53.1"
+  }
+}

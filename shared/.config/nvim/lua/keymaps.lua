@@ -1,17 +1,29 @@
 -- Diagnostic Config & Keymaps
 -- See :help vim.diagnostic.Opts
+local function show_diagnostic_float(diagnostic, bufnr)
+  if not diagnostic then
+    return
+  end
+
+  vim.diagnostic.open_float {
+    bufnr = bufnr,
+    scope = 'cursor',
+    focus = false,
+  }
+end
+
 vim.diagnostic.config {
   update_in_insert = false,
   severity_sort = true,
   float = { border = 'rounded', source = 'if_many' },
-  underline = { severity = { min = vim.diagnostic.severity.WARN } },
+  underline = { severity = vim.diagnostic.severity.ERROR },
 
   -- Can switch between these as you prefer
   virtual_text = true, -- Text shows up at the end of the line
   virtual_lines = false, -- Text shows up underneath the line, with virtual lines
 
   -- Auto open the float, so you can easily read the errors when jumping with `[d` and `]d`
-  jump = { float = true },
+  jump = { on_jump = show_diagnostic_float },
 }
 
 -- [[ Basic Keymaps ]]
@@ -69,6 +81,3 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- vim: ts=2 sts=2 sw=2 et
-
--- Disable jumping by LSP in insert mode
-vim.api.nvim_set_keymap('i', '<Tab>', '<Tab>', { noremap = true })

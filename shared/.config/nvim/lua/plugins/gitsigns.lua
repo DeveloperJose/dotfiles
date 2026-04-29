@@ -1,6 +1,4 @@
 -- Adds git related signs to the gutter, as well as utilities for managing changes
----@module 'lazy'
----@type LazySpec
 return {
   'lewis6991/gitsigns.nvim',
   ---@module 'gitsigns'
@@ -8,11 +6,13 @@ return {
   ---@diagnostic disable-next-line: missing-fields
   opts = {
     signs = {
-      add = { text = '+' }, ---@diagnostic disable-line: missing-fields
-      change = { text = '~' }, ---@diagnostic disable-line: missing-fields
-      delete = { text = '_' }, ---@diagnostic disable-line: missing-fields
-      topdelete = { text = '‾' }, ---@diagnostic disable-line: missing-fields
-      changedelete = { text = '~' }, ---@diagnostic disable-line: missing-fields
+      ---@diagnostic disable: missing-fields
+      add = { text = '+' },
+      change = { text = '~' },
+      delete = { text = '_' },
+      topdelete = { text = '‾' },
+      changedelete = { text = '~' },
+      ---@diagnostic enable: missing-fields
     },
   },
 }

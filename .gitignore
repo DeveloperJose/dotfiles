@@ -32,6 +32,9 @@ undo/
 shared/.config/nvim/undo/
 shared/.config/nvim/spell/*.spl
 
+# Generated shell state
+shared/.config/fish/fish_variables
+
 # --- System & OS Logs ---
 # Keep the repo clean of logs and OS-specific metadata
 *.log

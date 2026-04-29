@@ -1,0 +1,41 @@
+debug {
+    honor-xdg-activation-with-invalid-serial
+    // We only need to specify the render device for the AMD iGPU.
+    // The NVIDIA GPU is handled by driver configuration and environment variables.
+    render-drm-device "/dev/dri/renderD128"
+}
+
+
+// Main
+output "PNP(WAM) YM32CQA-100Hz 0x00000001" {
+    mode "2560x1440@100.001"
+    scale 1
+    transform "normal"
+    position x=1080 y=240
+}
+
+// Vertical
+output "PNP(PLN) PLL2410W 0x01010101" {
+    mode "1920x1080@60"
+    scale 1
+    transform "90"
+    position x=0 y=0
+
+    layout {
+        default-column-width { proportion 1.0; }
+    }
+}
+
+// Input device configuration.
+// Find the full list of options on the wiki:
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Input
+input {
+    keyboard {
+        numlock
+    }
+    mouse {
+        accel-speed 0.4
+        accel-profile "flat"
+    }
+}
+

@@ -1,29 +1,27 @@
----@module 'lazy'
----@type LazySpec
----@module "vim.lsp.client"
----@class vim.lsp.ClientConfig
----@type LspServersConfig.mason
 return {
   on_init = function(client)
     if client.workspace_folders then
       local path = client.workspace_folders[1].name
-      if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then return end
+      if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then
+        return
+      end
     end
 
     client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-      runtime = {
-        version = 'LuaJIT',
-        path = { 'lua/?.lua', 'lua/?/init.lua' },
-      },
+      runtime = { version = 'LuaJIT', path = { 'lua/?.lua', 'lua/?/init.lua' } },
       workspace = {
         checkThirdParty = false,
-        library = vim.api.nvim_get_runtime_file("", true),
+        -- Avoid indexing the config itself twice while preserving runtime library support.
+        library = vim.tbl_filter(function(path)
+          local config_path = vim.fn.stdpath 'config'
+          return path ~= config_path and path ~= (config_path .. '/after')
+        end, vim.api.nvim_get_runtime_file('', true)),
       },
       completion = {
-        callSnippet = "Replace",
+        callSnippet = 'Replace',
       },
       diagnostics = {
-        globals = { "vim" },
+        globals = { 'vim' },
       },
     })
   end,
@@ -31,13 +29,12 @@ return {
     Lua = {
       workspace = {
         checkThirdParty = false,
-        library = vim.api.nvim_get_runtime_file("", true),
       },
       completion = {
-        callSnippet = "Replace",
+        callSnippet = 'Replace',
       },
       diagnostics = {
-        globals = { "vim" },
+        globals = { 'vim' },
       },
     },
   },

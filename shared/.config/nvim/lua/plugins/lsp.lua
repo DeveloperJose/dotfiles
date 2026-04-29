@@ -6,7 +6,9 @@ local function get_mason_lsp_configs()
     local name = vim.fn.fnamemodify(file, ':t:r')
     local ok, config_or_err = pcall(require, 'plugins.lsp.mason.' .. name)
     if ok and type(config_or_err) == 'table' then
-      if not config_or_err.disabled then configs[name] = config_or_err end
+      if not config_or_err.disabled then
+        configs[name] = config_or_err
+      end
     else
       vim.notify(('Could not load LSP config "%s"\nReason: %s'):format(name, config_or_err), vim.log.levels.WARN)
     end
@@ -16,31 +18,31 @@ local function get_mason_lsp_configs()
 end
 
 local ensure_installed = {
-  'stylua',
-  'ts_ls',
-  'vue_ls',
-  'vtsls',
-  'tailwindcss',
-  'lua_ls',
-  'bashls',
-  'pyright',
-  'rust_analyzer',
+  -- LSP servers. Use Mason package names here, not always lspconfig server names.
+  'bash-language-server',
+  'dot-language-server',
   'ltex-ls-plus',
+  'lua-language-server',
   'phpactor',
-  -- 'psalm',
-  'intelephense',
-  'dotls',
-  'phpstan', -- PHP Linter
-  'phpcs', -- PHP Linter (2)
-  'php-cs-fixer', -- PHP Formatter
+  'pyright',
+  'rust-analyzer',
+  'tailwindcss-language-server',
+  'vtsls',
+  'vue-language-server',
+
+  -- Formatters, linters, and DAP adapters.
+  'stylua',            -- Used to format Lua code
+  'phpstan',           -- PHP Linter
+  'phpcs',             -- PHP Linter (2)
+  'php-cs-fixer',      -- PHP Formatter
   'php-debug-adapter', -- PHP DAP
-  'eslint_d', -- JS/TS Linter
-  'prettierd', -- JS/TS Formatter
-  'ruff', -- Python Formatter and Linter
-  'shfmt', -- Formatter (bash, sh)
-  'shellcheck', -- Linter (bash, sh)
-  'beautysh', -- Formatter (zsh)
-  'latexindent', -- Formatter (tex)
+  'eslint_d',          -- JS/TS Linter
+  'prettierd',         -- JS/TS Formatter
+  'ruff',              -- Python Formatter and Linter
+  'shfmt',             -- Formatter (bash, sh)
+  'shellcheck',        -- Linter (bash, sh)
+  'beautysh',          -- Formatter (zsh)
+  'latexindent',       -- Formatter (tex)
 }
 
 return {
@@ -49,20 +51,13 @@ return {
     'neovim/nvim-lspconfig',
     dependencies = {
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-      {
-        'mason-org/mason.nvim',
-        ---@module 'mason.settings'
-        ---@type MasonSettings
-        ---@diagnostic disable-next-line: missing-fields
-        opts = {},
-      },
-      'mason-org/mason-lspconfig.nvim',
+      { 'mason-org/mason.nvim', opts = {} },
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',    opts = {} },
 
-
+      -- 'saghen/blink.cmp',
     },
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -88,7 +83,9 @@ return {
           map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
           -- Toggle to show/hide diagnostic messages
-          map('<leader>td', function() vim.diagnostic.enable(not vim.diagnostic.is_enabled()) end, '[T]oggle [D]iagnostics')
+          map('<leader>td', function()
+            vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+          end, '[T]oggle [D]iagnostics')
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
@@ -124,7 +121,9 @@ return {
           --
           -- This may be unwanted, since they displace some of your code
           if client and client:supports_method('textDocument/inlayHint', event.buf) then
-            map('<leader>th', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end, '[T]oggle Inlay [H]ints')
+            map('<leader>th', function()
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+            end, '[T]oggle Inlay [H]ints')
           end
         end,
       })
@@ -146,7 +145,6 @@ return {
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --  See `:help lsp-config` for information about keys and how to configure
-      ---@type table<string, vim.lsp.Config>
       local servers = {
         mason = {},
         others = {},
@@ -154,20 +152,36 @@ return {
 
       -- Get Mason LSP configs from ./lsp/mason folder
       for name, config in pairs(get_mason_lsp_configs()) do
-        if not config.disabled then servers.mason[name] = config end
+        if not config.disabled then
+          servers.mason[name] = config
+        end
       end
 
+      -- Keep this rather than relying solely on mason-lspconfig:
+      -- it can install non-LSP tools such as formatters, linters, and DAP adapters.
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      require('mason-lspconfig').setup {
-        handlers = {
-          function(server_name)
-            local server = servers.mason[server_name] or {}
-            -- Require and setup the server with the captured server config
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
-      }
+      -- Either merge all additional server configs from the `servers.mason` and `servers.others` tables
+      -- to the default language server configs as provided by nvim-lspconfig or
+      -- define a custom server config that's unavailable on nvim-lspconfig.
+      for server, config in pairs(vim.tbl_extend('keep', servers.mason, servers.others)) do
+        vim.lsp.config(server, config)
+      end
+
+      -- Manually enable all LSPs installed via Mason, this way we can ignore the explicitly disabled ones
+      if not vim.tbl_isempty(servers.mason) then
+        for _, server in ipairs(vim.tbl_keys(servers.mason)) do
+          vim.lsp.enable(server)
+        end
+      end
+
+      -- Manually run vim.lsp.enable for all language servers that are *not* installed via Mason
+      if not vim.tbl_isempty(servers.others) then
+        for _, server in ipairs(vim.tbl_keys(servers.others)) do
+          vim.lsp.enable(server)
+        end
+      end
+
     end,
   },
 }

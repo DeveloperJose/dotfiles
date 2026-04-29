@@ -1,5 +1,3 @@
----@module 'lazy'
----@type LazySpec
 return {
   'stevearc/oil.nvim',
   ---@module 'oil'

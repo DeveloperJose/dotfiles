@@ -1,4 +1,5 @@
-
+-- Disable jumping by LSP in insert mode
+vim.api.nvim_set_keymap('i', '<Tab>', '<Tab>', { noremap = true })
 
 -- Remove 'r' and 'o' from formatoptions
 -- This makes comments not keep starting on new lines
@@ -62,9 +63,28 @@ vim.o.showmode = false
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.schedule(function()
-  vim.o.clipboard = 'unnamedplus'
-end)
+-- vim.schedule(function()
+--   vim.o.clipboard = 'unnamedplus'
+-- end)
+
+-- Always use system clipboard as default register
+vim.opt.clipboard = 'unnamedplus'
+
+-- Use OSC52 clipboard provider when inside SSH
+local ok_osc52, osc52 = pcall(require, 'vim.ui.clipboard.osc52')
+if vim.env.SSH_TTY and ok_osc52 then
+  vim.g.clipboard = {
+    name = 'OSC52',
+    copy = {
+      ['+'] = osc52.copy '+',
+      ['*'] = osc52.copy '*',
+    },
+    paste = {
+      ['+'] = osc52.paste '+',
+      ['*'] = osc52.paste '*',
+    },
+  }
+end
 
 -- Enable break indent
 vim.o.breakindent = true

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="${DOTFILES_DIR:-$SCRIPT_DIR}"
 TARGET_DIR="${TARGET_DIR:-$HOME}"
 BACKUP_ROOT="${BACKUP_ROOT:-$HOME/.dotfiles_backups}"
 HOST="${HOSTNAME:-$(hostnamectl hostname 2>/dev/null || hostname 2>/dev/null || echo unknown)}"
@@ -9,6 +10,7 @@ HOST="${HOSTNAME:-$(hostnamectl hostname 2>/dev/null || hostname 2>/dev/null || 
 DRY_RUN=0
 RESTOW=1
 BACKUP=1
+SYSTEM=0
 REQUESTED_PACKAGES=()
 
 usage() {
@@ -19,11 +21,15 @@ Options:
   -n, --dry-run      Show what would happen without changing files.
   --no-backup        Do not move conflicting files out of the way.
   --no-restow        Run stow normally instead of restow.
+  --system           Stow system packages into / instead of home packages.
   -h, --help         Show this help.
 
 With no package arguments, packages are selected from the host:
   shared, plus arch-desktop on arch desktop hosts, arch-laptop on arch laptop
   hosts, and debian on Debian hosts.
+
+System packages target / and usually need sudo:
+  sudo ./sync.sh --system
 USAGE
 }
 
@@ -37,6 +43,11 @@ while (($#)); do
             ;;
         --no-restow)
             RESTOW=0
+            ;;
+        --system)
+            SYSTEM=1
+            TARGET_DIR=/
+            BACKUP_ROOT="${SYSTEM_BACKUP_ROOT:-$HOME/.dotfiles_system_backups}"
             ;;
         -h|--help)
             usage
@@ -69,6 +80,13 @@ cd "$DOTFILES_DIR"
 PACKAGES=()
 if ((${#REQUESTED_PACKAGES[@]})); then
     PACKAGES=("${REQUESTED_PACKAGES[@]}")
+elif ((SYSTEM)); then
+    if [[ -f /etc/arch-release && "$HOST" == *desktop* && -d arch-desktop-system ]]; then
+        PACKAGES=("arch-desktop-system")
+    else
+        echo "No system package selected for host: $HOST" >&2
+        exit 1
+    fi
 else
     PACKAGES=("shared")
 
@@ -99,6 +117,9 @@ BACKUP_DIR="$BACKUP_ROOT/$(date +%Y%m%d_%H%M%S)"
 echo "Host: $HOST"
 echo "Target: $TARGET_DIR"
 echo "Packages: ${PACKAGES[*]}"
+if ((SYSTEM)) && [[ $EUID -ne 0 ]]; then
+    echo "System packages target / and usually require root. Re-run with sudo if stow reports permission errors."
+fi
 
 for pkg in "${PACKAGES[@]}"; do
     if [[ ! -d "$pkg" ]]; then

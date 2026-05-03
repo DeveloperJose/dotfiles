@@ -53,3 +53,12 @@ cd ~/dotfiles
 chmod +x sync.sh
 ./sync.sh
 ```
+
+### 3. Apply system files
+System files live in `arch-desktop-system` and are stowed into `/`.
+They currently manage GRUB and greetd/DMS configuration for `arch-desktop`.
+
+```bash
+sudo ./sync.sh --system
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+```

@@ -1,62 +1,29 @@
-# DevJ's dotfiles
-This repo contains the dotfiles used across my systems, managed via **GNU Stow**.
+# DevJ's Dotfiles
 
-## 🛠️ Arch System Setup
-First, install the core development and research stack:
+GNU Stow-managed dotfiles for shared machines and `arch-desktop`.
+
+## Bootstrap
+
+Fresh machine:
 
 ```bash
-sudo pacman -S base-devel git stow openssh nvim fish starship fastfetch lazygit tmux less \
-    make unzip wget curl \
-    fd ripgrep tree \
-    bun python nodejs npm luarocks tree-sitter-cli rustup pnpm \
-    docker docker-compose docker-buildx \
-    ccache cmake cuda
-
-# Set fish as default shell
-chsh -s /usr/bin/fish
-
-# Initialize Rust
-rustup default stable
-
-# Install AUR helper (paru)
-cd /tmp && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si
-
-# php7.4 + NVIDIA passthrough to docker
-paru -S nvidia-container-toolkit php74 php74-mysql php74-xml php74-curl php74-zip php74-json php74-cli php74-tokenizer php74-phar php74-mbstring php74-simplexml php74-iconv php74-dom php74-xmlwriter
-
-# Install Composer for PHP 7.4
-wget https://raw.githubusercontent.com/composer/getcomposer.org/f3108f64b4e1c1ce6eb462b159956461592b3e3e/web/installer -O - -q | php74 -- --quiet
+git clone git@github.com:DeveloperJose/dotfiles.git ~/dotfiles && cd ~/dotfiles && chmod +x sync.sh && ./sync.sh
 ```
 
-## 🖥️ Window Manager Setup
-### Wayland (Desktop/Laptop)
+The bootstrap is safe to re-run. It installs the recovery package set, makes
+Fish the login shell, and restows the matching package folders.
+
+Useful modes:
+
 ```bash
-curl -fsSL https://install.danklinux.com | sh
+./sync.sh --dry-run
+./sync.sh --no-bootstrap
+./sync.sh shared
 ```
 
-### WSL (TTY Only)
-```bash
-sudo pacman -S xclip xsel
-```
+## System Files
 
-## 🔄 Syncing Dotfiles
-We use an environment-aware bootstrap script to handle symlinking. This script identifies the host and stows the appropriate configuration folders, moving any existing OS default files to a backup directory.
-
-### 1. Clone the repository
-```bash
-git clone git@github.com:DeveloperJose/dotfiles.git ~/dotfiles
-cd ~/dotfiles
-```
-
-### 2. Run the Bootstrap
-```bash
-chmod +x sync.sh
-./sync.sh
-```
-
-### 3. Apply system files
-System files live in `arch-desktop-system` and are stowed into `/`.
-They currently manage GRUB and greetd/DMS configuration for `arch-desktop`.
+`arch-desktop-system` manages root-targeted files for GRUB and greetd/DMS.
 
 ```bash
 sudo ./sync.sh --system

@@ -11,7 +11,92 @@ DRY_RUN=0
 RESTOW=1
 BACKUP=1
 SYSTEM=0
+BOOTSTRAP=1
 REQUESTED_PACKAGES=()
+
+# One shared recovery list for every distro. Names are translated per package
+# manager only where distributions disagree.
+SHARED_PACKAGES=(
+    curl       # HTTP client used by installers and scripts.
+    fastfetch  # System summary shown in interactive shells.
+    fd         # Fast file finder.
+    fish       # Default interactive shell.
+    git        # Version control and dotfiles checkout.
+    lazygit    # Terminal UI for Git.
+    less       # Pager for logs, man output, and Git.
+    make       # Common build tool for source installs.
+    neovim     # Editor.
+    openssh    # SSH client/server tools; mapped to openssh-client on Debian.
+    ripgrep    # Fast text search.
+    rsync      # File sync/copy tool.
+    starship   # Cross-shell prompt.
+    stow       # Dotfile symlink manager.
+    tmux       # Terminal multiplexer.
+    tree       # Directory tree viewer.
+    unzip      # Zip archive extraction.
+    wget       # Downloader used by some installers.
+)
+
+# Arch desktop recovery, not a snapshot of every currently installed package.
+ARCH_DESKTOP_PACKAGES=(
+    amd-ucode                 # AMD CPU microcode for early boot.
+    amdgpu_top                # AMD GPU monitoring.
+    btrfs-progs               # Btrfs filesystem tools.
+    cliphist                  # Wayland clipboard history.
+    dms-shell                 # DankMaterialShell desktop shell.
+    dms-shell-niri            # DMS integration for niri.
+    docker                    # Container engine.
+    docker-buildx             # Docker BuildKit/buildx plugin.
+    docker-compose            # Docker Compose plugin.
+    egl-wayland               # EGL support for Wayland clients.
+    firefox                   # Browser.
+    foot                      # Wayland terminal.
+    fuzzel                    # Wayland app launcher.
+    greetd                    # Login/session daemon.
+    grim                      # Wayland screenshot tool.
+    grub                      # Bootloader.
+    jq                        # JSON processor.
+    linux                     # Arch kernel.
+    linux-firmware            # Device firmware.
+    linux-headers             # Kernel headers for DKMS/builds.
+    mesa-utils                # Mesa/OpenGL diagnostic tools.
+    networkmanager            # Network management daemon and CLI.
+    niri                      # Scrollable Wayland compositor.
+    noto-fonts                # General Noto font family.
+    noto-fonts-cjk            # CJK font coverage.
+    noto-fonts-emoji          # Emoji font coverage.
+    pacman-contrib            # Pacman helpers such as paccache.
+    pipewire                  # Media server core.
+    pipewire-alsa             # ALSA compatibility for PipeWire.
+    pipewire-audio            # PipeWire audio session components.
+    pipewire-pulse            # PulseAudio compatibility for PipeWire.
+    polkit-gnome              # Polkit authentication agent.
+    qt5-wayland               # Qt5 Wayland support.
+    qt5ct                     # Qt5 theme/config tool.
+    qt6-multimedia-ffmpeg     # Qt6 multimedia FFmpeg backend.
+    qt6-wayland               # Qt6 Wayland support.
+    reflector                 # Arch mirrorlist updater.
+    slurp                     # Wayland region selector.
+    ttf-dejavu                # DejaVu TrueType fonts.
+    ttf-liberation            # Microsoft-compatible metric fonts.
+    uwsm                      # User Wayland session manager.
+    vulkan-radeon             # Radeon Vulkan driver.
+    vulkan-tools              # Vulkan diagnostic tools.
+    wireplumber               # PipeWire session manager.
+    wl-clipboard              # Wayland clipboard CLI tools.
+    xwayland-satellite        # Xwayland support for niri.
+    zathura                   # PDF/document viewer.
+    zathura-pdf-mupdf         # PDF backend for zathura.
+    zoxide                    # Smarter cd command.
+)
+
+ARCH_DESKTOP_AUR_PACKAGES=(
+    cpptrace                # Runtime library needed by quickshell on this setup.
+    dsearch-bin             # Dank filesystem search service.
+    greetd-dms-greeter-git  # DMS greeter for greetd.
+    quickshell-git          # QtQuick shell runtime used by DMS.
+    qt6ct-kde               # Qt6 config tool variant expected by DMS.
+)
 
 usage() {
     cat <<'USAGE'
@@ -20,6 +105,7 @@ Usage: ./sync.sh [options] [package ...]
 Options:
   -n, --dry-run      Show what would happen without changing files.
   --no-backup        Do not move conflicting files out of the way.
+  --no-bootstrap     Skip package installation and fish shell setup.
   --no-restow        Run stow normally instead of restow.
   --system           Stow system packages into / instead of home packages.
   -h, --help         Show this help.
@@ -41,11 +127,15 @@ while (($#)); do
         --no-backup)
             BACKUP=0
             ;;
+        --no-bootstrap)
+            BOOTSTRAP=0
+            ;;
         --no-restow)
             RESTOW=0
             ;;
         --system)
             SYSTEM=1
+            BOOTSTRAP=0
             TARGET_DIR=/
             BACKUP_ROOT="${SYSTEM_BACKUP_ROOT:-$HOME/.dotfiles_system_backups}"
             ;;
@@ -70,8 +160,188 @@ while (($#)); do
     shift
 done
 
+run_cmd() {
+    if ((DRY_RUN)); then
+        printf 'DRY-RUN:'
+        printf ' %q' "$@"
+        printf '\n'
+    else
+        "$@"
+    fi
+}
+
+sudo_cmd() {
+    if [[ $EUID -eq 0 ]]; then
+        run_cmd "$@"
+    elif command -v sudo >/dev/null 2>&1; then
+        run_cmd sudo "$@"
+    else
+        echo "sudo is required to run: $*" >&2
+        return 1
+    fi
+}
+
+arch_package_name() {
+    case "$1" in
+        openssh) echo openssh ;;
+        *) echo "$1" ;;
+    esac
+}
+
+debian_package_name() {
+    case "$1" in
+        fd) echo fd-find ;;
+        openssh) echo openssh-client ;;
+        *) echo "$1" ;;
+    esac
+}
+
+installed_pacman_package() {
+    pacman -Q "$1" >/dev/null 2>&1
+}
+
+installed_debian_package() {
+    dpkg-query -W -f='${db:Status-Abbrev}' "$1" 2>/dev/null | grep -q '^ii '
+}
+
+install_pacman_packages() {
+    local missing=()
+    local pkg
+
+    for pkg in "$@"; do
+        if ! installed_pacman_package "$pkg"; then
+            missing+=("$pkg")
+        fi
+    done
+
+    if ((${#missing[@]})); then
+        sudo_cmd pacman -S --needed "${missing[@]}"
+    fi
+}
+
+install_debian_packages() {
+    local missing=()
+    local unavailable=()
+    local pkg
+
+    for pkg in "$@"; do
+        if ! apt-cache show "$pkg" >/dev/null 2>&1; then
+            unavailable+=("$pkg")
+            continue
+        fi
+
+        if ! installed_debian_package "$pkg"; then
+            missing+=("$pkg")
+        fi
+    done
+
+    if ((${#missing[@]})); then
+        sudo_cmd apt-get update
+        sudo_cmd apt-get install -y "${missing[@]}"
+    fi
+
+    if ((${#unavailable[@]})); then
+        echo "Unavailable from configured apt repositories: ${unavailable[*]}" >&2
+    fi
+}
+
+install_paru() {
+    if command -v paru >/dev/null 2>&1; then
+        return 0
+    fi
+
+    if ((DRY_RUN)); then
+        echo "DRY-RUN: install paru from AUR"
+        return 0
+    fi
+
+    local build_dir=/tmp/paru
+    if [[ -d "$build_dir/.git" ]]; then
+        git -C "$build_dir" pull --ff-only
+    else
+        rm -rf "$build_dir"
+        git clone https://aur.archlinux.org/paru.git "$build_dir"
+    fi
+    (cd "$build_dir" && makepkg -si --noconfirm)
+}
+
+install_aur_packages() {
+    local missing=()
+    local pkg
+
+    install_paru
+
+    for pkg in "$@"; do
+        if ! installed_pacman_package "$pkg"; then
+            missing+=("$pkg")
+        fi
+    done
+
+    if ((${#missing[@]})); then
+        run_cmd paru -S --needed "${missing[@]}"
+    fi
+}
+
+bootstrap_packages() {
+    local mapped=()
+    local pkg
+
+    if [[ -f /etc/arch-release ]]; then
+        for pkg in "${SHARED_PACKAGES[@]}"; do
+            mapped+=("$(arch_package_name "$pkg")")
+        done
+        install_pacman_packages "${mapped[@]}"
+
+        if [[ "$HOST" == *desktop* ]]; then
+            install_pacman_packages "${ARCH_DESKTOP_PACKAGES[@]}"
+            install_aur_packages "${ARCH_DESKTOP_AUR_PACKAGES[@]}"
+        fi
+    elif [[ -f /etc/debian_version ]]; then
+        for pkg in "${SHARED_PACKAGES[@]}"; do
+            mapped+=("$(debian_package_name "$pkg")")
+        done
+        install_debian_packages "${mapped[@]}"
+    else
+        echo "No package bootstrap configured for this distro; skipping package install."
+    fi
+}
+
+ensure_fish_shell() {
+    local target_user="${SUDO_USER:-$USER}"
+    local current_shell
+    local fish_path
+
+    if [[ "$target_user" == root ]]; then
+        echo "Skipping fish shell change for root."
+        return 0
+    fi
+
+    if ! fish_path="$(command -v fish 2>/dev/null)"; then
+        echo "fish is not on PATH after package bootstrap." >&2
+        return 1
+    fi
+
+    if ! grep -Fxq "$fish_path" /etc/shells; then
+        if ((DRY_RUN)); then
+            echo "DRY-RUN: add $fish_path to /etc/shells"
+        else
+            printf '%s\n' "$fish_path" | sudo tee -a /etc/shells >/dev/null
+        fi
+    fi
+
+    current_shell="$(getent passwd "$target_user" | cut -d: -f7)"
+    if [[ "$current_shell" != "$fish_path" ]]; then
+        sudo_cmd chsh -s "$fish_path" "$target_user"
+    fi
+}
+
+if ((BOOTSTRAP)); then
+    bootstrap_packages
+    ensure_fish_shell
+fi
+
 if ! command -v stow >/dev/null 2>&1; then
-    echo "GNU Stow is not installed. On Arch: sudo pacman -S --needed stow" >&2
+    echo "GNU Stow is not installed. Re-run without --no-bootstrap, or install stow manually." >&2
     exit 127
 fi
 

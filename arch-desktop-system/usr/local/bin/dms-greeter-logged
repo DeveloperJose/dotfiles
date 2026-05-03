@@ -1,0 +1,13 @@
+#!/bin/bash
+set -u
+
+log=/var/cache/dms-greeter/dms-greeter.log
+
+{
+  echo
+  echo "== dms-greeter start: $(date -Is) =="
+  id
+  echo "cmd: /usr/bin/dms-greeter --command niri --cache-dir /var/cache/dms-greeter -C /etc/greetd/niri/config.kdl --debug"
+} >>"$log" 2>&1
+
+exec /usr/bin/dms-greeter --command niri --cache-dir /var/cache/dms-greeter -C /etc/greetd/niri/config.kdl --debug >>"$log" 2>&1

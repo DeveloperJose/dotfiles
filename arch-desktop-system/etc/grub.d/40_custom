@@ -1,0 +1,54 @@
+#!/bin/sh
+exec tail -n +3 $0
+# This file provides the visible GRUB menu entries.
+
+
+### BEGIN CODEX ARCH ENTRY ###
+menuentry 'Arch Linux' --class arch --class gnu-linux --class gnu --class os {
+	load_video
+	set gfxpayload=keep
+	insmod gzio
+	insmod part_gpt
+	insmod btrfs
+	search --no-floppy --fs-uuid --set=root 62261abb-1818-44bf-ad99-83c56c20dc82
+	echo	'Loading Linux linux ...'
+	linux	/@/boot/vmlinuz-linux root=UUID=62261abb-1818-44bf-ad99-83c56c20dc82 rw rootflags=subvol=@  loglevel=3 quiet amdgpu.gttsize=49152 ttm.pages_limit=12582912 ttm.page_pool_size=12582912
+	echo	'Loading initial ramdisk ...'
+	initrd	/@/boot/amd-ucode.img /@/boot/initramfs-linux.img
+}
+### END CODEX ARCH ENTRY ###
+
+### BEGIN CODEX ARCH RECOVERY TTY ENTRY ###
+menuentry 'Arch Linux (recovery TTY)' --class arch --class gnu-linux --class gnu --class os {
+	load_video
+	set gfxpayload=keep
+	insmod gzio
+	insmod part_gpt
+	insmod btrfs
+	search --no-floppy --fs-uuid --set=root 62261abb-1818-44bf-ad99-83c56c20dc82
+	echo	'Loading Linux linux ...'
+	linux	/@/boot/vmlinuz-linux root=UUID=62261abb-1818-44bf-ad99-83c56c20dc82 rw rootflags=subvol=@  loglevel=3 quiet amdgpu.gttsize=49152 ttm.pages_limit=12582912 ttm.page_pool_size=12582912 systemd.unit=multi-user.target
+	echo	'Loading initial ramdisk ...'
+	initrd	/@/boot/amd-ucode.img /@/boot/initramfs-linux.img
+}
+### END CODEX ARCH RECOVERY TTY ENTRY ###
+
+### BEGIN CODEX WINDOWS BOOT MANAGER ENTRY ###
+menuentry 'Windows Boot Manager' --class windows --class os {
+	insmod part_gpt
+	insmod fat
+	search --no-floppy --fs-uuid --set=root D00E-739D
+	chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+}
+### END CODEX WINDOWS BOOT MANAGER ENTRY ###
+
+### BEGIN CODEX UEFI FIRMWARE ENTRY ###
+if [ "$grub_platform" = "efi" ]; then
+	fwsetup --is-supported
+	if [ "$?" = 0 ]; then
+		menuentry 'UEFI Firmware Settings' {
+			fwsetup
+		}
+	fi
+fi
+### END CODEX UEFI FIRMWARE ENTRY ###

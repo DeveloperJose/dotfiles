@@ -1,0 +1,5 @@
+debug {
+    honor-xdg-activation-with-invalid-serial
+    render-drm-device "/dev/dri/renderD128"
+    ignore-drm-device "/dev/dri/card0"
+}

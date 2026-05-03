@@ -18,9 +18,23 @@ if status is-interactive
     set --erase DISPLAY
 
     # --- SSH Agent ---
-    if not set -q SSH_AUTH_SOCK; or test -z "$SSH_AUTH_SOCK"
-        eval (ssh-agent -c)
+    set -l ssh_agent_socket "$XDG_RUNTIME_DIR/ssh-agent.socket"
+    if test -z "$XDG_RUNTIME_DIR"
+        set ssh_agent_socket "/tmp/ssh-agent-$USER.sock"
     end
+
+    if not set -q SSH_AUTH_SOCK; or test -z "$SSH_AUTH_SOCK"
+        set -gx SSH_AUTH_SOCK "$ssh_agent_socket"
+    end
+
+    if test "$SSH_AUTH_SOCK" = "$ssh_agent_socket"
+        ssh-add -l >/dev/null 2>&1
+        if test $status -eq 2
+            command rm -f "$SSH_AUTH_SOCK"
+            eval (ssh-agent -c -a "$SSH_AUTH_SOCK")
+        end
+    end
+
     for key in ~/.ssh/*
         if test -f "$key"
             and not string match -q "*.pub" "$key"

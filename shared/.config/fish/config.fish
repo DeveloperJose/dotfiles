@@ -55,6 +55,11 @@ if status is-interactive
     end
 
     # pnpm end
-    fastfetch
-    starship init fish | source
+    if type -q fastfetch
+        fastfetch
+    end
+
+    if type -q starship
+        starship init fish | source
+    end
 end

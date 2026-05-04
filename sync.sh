@@ -399,7 +399,14 @@ for pkg in "${PACKAGES[@]}"; do
 
     echo
     echo "Checking package: $pkg"
-    if ! stow --no --verbose --dir "$DOTFILES_DIR" --target "$TARGET_DIR" "$pkg"; then
+    stow_check_output="$(stow --no --verbose --dir "$DOTFILES_DIR" --target "$TARGET_DIR" "$pkg" 2>&1)" || stow_check_status=$?
+    stow_check_status="${stow_check_status:-0}"
+
+    if ((DRY_RUN)); then
+        printf '%s\n' "$stow_check_output"
+    fi
+
+    if ((stow_check_status != 0)); then
         if ((DRY_RUN)); then
             echo "Conflicts found for $pkg. Merge or back up these files before applying."
             continue
@@ -411,13 +418,14 @@ for pkg in "${PACKAGES[@]}"; do
         fi
 
         mapfile -t conflicts < <(
-            stow --no --verbose --dir "$DOTFILES_DIR" --target "$TARGET_DIR" "$pkg" 2>&1 |
+            printf '%s\n' "$stow_check_output" |
                 sed -n \
                     -e 's/.*existing target is neither a link nor a directory: //p' \
                     -e 's/.* over existing target \(.*\) since neither a link nor a directory.*/\1/p'
         )
 
         if ((${#conflicts[@]} == 0)); then
+            printf '%s\n' "$stow_check_output" >&2
             echo "Stow reported a conflict, but it could not be parsed. Re-run with --dry-run and inspect manually." >&2
             exit 1
         fi
@@ -432,6 +440,7 @@ for pkg in "${PACKAGES[@]}"; do
             fi
         done
     fi
+    unset stow_check_status
 
     if ((DRY_RUN)); then
         stow "${STOW_ARGS[@]}" "$pkg"

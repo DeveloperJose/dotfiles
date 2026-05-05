@@ -1,0 +1,23 @@
+approvals_reviewer = "user"
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
+[projects."/home/ubuntu/local-debian/website"]
+trust_level = "trusted"
+
+[projects."/home/ubuntu/dotfiles"]
+trust_level = "trusted"
+
+[projects."/home/ubuntu"]
+trust_level = "trusted"
+
+[projects."/data/website"]
+trust_level = "trusted"
+
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "context-remaining", "context-used", "five-hour-limit", "weekly-limit", "context-window-size", "used-tokens", "total-input-tokens", "total-output-tokens"]
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
+
+[notice]
+fast_default_opt_out = true

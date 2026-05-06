@@ -13,6 +13,7 @@ BACKUP=1
 SYSTEM=0
 BOOTSTRAP=1
 REQUESTED_PACKAGES=()
+TREE_SITTER_CLI_VERSION="${TREE_SITTER_CLI_VERSION:-0.25.10}"
 
 # One shared recovery list for every distro. Names are translated per package
 # manager only where distributions disagree.
@@ -25,7 +26,6 @@ SHARED_PACKAGES=(
     lazygit    # Terminal UI for Git.
     less       # Pager for logs, man output, and Git.
     make       # Common build tool for source installs.
-    neovim     # Editor.
     openssh    # SSH client/server tools; mapped to openssh-client on Debian.
     ripgrep    # Fast text search.
     rsync      # File sync/copy tool.
@@ -301,6 +301,59 @@ ensure_pnpm() {
     echo "pnpm is not installed and no installer is configured for this distro." >&2
 }
 
+ensure_node_cli_tools() {
+    if ! command -v npm >/dev/null 2>&1; then
+        echo "npm is not installed; cannot install Node-based CLI tools." >&2
+        return 1
+    fi
+
+    run_cmd npm install -g pnpm "tree-sitter-cli@$TREE_SITTER_CLI_VERSION"
+}
+
+neovim_release_arch() {
+    case "$(uname -m)" in
+        x86_64|amd64) echo x86_64 ;;
+        aarch64|arm64) echo arm64 ;;
+        *)
+            echo "Unsupported Neovim release architecture: $(uname -m)" >&2
+            return 1
+            ;;
+    esac
+}
+
+install_neovim_latest() {
+    local arch
+    local archive
+    local install_dir
+    local tmpdir
+    local url
+
+    if [[ "$(uname -s)" != Linux ]]; then
+        echo "Skipping upstream Neovim install on non-Linux system: $(uname -s)"
+        return 0
+    fi
+
+    arch="$(neovim_release_arch)"
+    archive="nvim-linux-$arch.tar.gz"
+    install_dir="/opt/nvim-linux-$arch"
+    tmpdir="/tmp/neovim-install-$arch"
+    url="https://github.com/neovim/neovim/releases/latest/download/$archive"
+
+    if ((DRY_RUN)); then
+        echo "DRY-RUN: install latest Neovim from $url to $install_dir and link /opt/nvim"
+        return 0
+    fi
+
+    rm -rf "$tmpdir"
+    mkdir -p "$tmpdir"
+    curl -fL "$url" -o "$tmpdir/$archive"
+    tar -C "$tmpdir" -xzf "$tmpdir/$archive"
+    sudo_cmd rm -rf "$install_dir"
+    sudo_cmd mv "$tmpdir/nvim-linux-$arch" "$install_dir"
+    sudo_cmd ln -sfn "$install_dir" /opt/nvim
+    rm -rf "$tmpdir"
+}
+
 bootstrap_packages() {
     local mapped=()
     local pkg
@@ -356,7 +409,9 @@ ensure_fish_shell() {
 
 if ((BOOTSTRAP)); then
     bootstrap_packages
+    install_neovim_latest
     ensure_pnpm
+    ensure_node_cli_tools
     ensure_fish_shell
 fi
 

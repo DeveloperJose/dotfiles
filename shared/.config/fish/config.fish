@@ -1,5 +1,17 @@
 set -gx PNPM_HOME "$HOME/.local/share/pnpm"
-set -l base_paths "$HOME/.local/bin" "$HOME/bin" $PNPM_HOME
+set -l base_paths /opt/nvim/bin "$HOME/.local/bin" "$HOME/bin"
+for node_bin in $PNPM_HOME/nodejs/*/bin
+    if test -d "$node_bin"
+        set -a base_paths "$node_bin"
+    end
+end
+if type -q npm
+    set -l npm_prefix (npm config get prefix 2>/dev/null)
+    if test -n "$npm_prefix"
+        set -a base_paths "$npm_prefix/bin"
+    end
+end
+set -a base_paths $PNPM_HOME
 for path_entry in $base_paths
     set -gx PATH (string match -v -e $path_entry $PATH)
 end

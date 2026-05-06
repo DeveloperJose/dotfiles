@@ -282,6 +282,25 @@ install_aur_packages() {
     fi
 }
 
+ensure_pnpm() {
+    if command -v pnpm >/dev/null 2>&1; then
+        return 0
+    fi
+
+    if [[ -f /etc/arch-release ]]; then
+        install_pacman_packages pnpm
+        return 0
+    fi
+
+    if [[ -f /etc/debian_version ]]; then
+        install_debian_packages nodejs npm
+        run_cmd npm install -g pnpm
+        return 0
+    fi
+
+    echo "pnpm is not installed and no installer is configured for this distro." >&2
+}
+
 bootstrap_packages() {
     local mapped=()
     local pkg
@@ -337,6 +356,7 @@ ensure_fish_shell() {
 
 if ((BOOTSTRAP)); then
     bootstrap_packages
+    ensure_pnpm
     ensure_fish_shell
 fi
 

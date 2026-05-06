@@ -1,13 +1,17 @@
+set -gx PNPM_HOME "$HOME/.local/share/pnpm"
+set -l base_paths "$HOME/.local/bin" "$HOME/bin" $PNPM_HOME
+for path_entry in $base_paths
+    set -gx PATH (string match -v -e $path_entry $PATH)
+end
+set -gx PATH $base_paths $PATH
+
 if status is-interactive
     # Commands to run in interactive sessions can go here
-    fish_add_path $HOME/.local/bin
-    fish_add_path $HOME/bin
     fish_add_path $HOME/.opencode/bin
     fish_add_path /usr/local/cuda/bin
     fish_add_path $HOME/.npm-global/bin
     fish_add_path $HOME/local-arch/ai/llama.cpp/build/bin
     fish_add_path /usr/lib/node_modules/.bin
-    fish_add_path "$HOME/.bun/bin"
     fish_add_path $HOME/.cargo/bin
     set -gx PATH (string match -v -e /sbin $PATH | string match -v -e /usr/sbin)
 
@@ -48,13 +52,6 @@ if status is-interactive
         end
     end
 
-    # pnpm
-    set -gx PNPM_HOME "/home/devj/.local/share/pnpm"
-    if not string match -q -- $PNPM_HOME $PATH
-        set -gx PATH "$PNPM_HOME" $PATH
-    end
-
-    # pnpm end
     if type -q fastfetch
         fastfetch
     end
@@ -63,7 +60,3 @@ if status is-interactive
         starship init fish | source
     end
 end
-
-# bun
-set --export BUN_INSTALL "$HOME/.bun"
-set --export PATH $BUN_INSTALL/bin $PATH

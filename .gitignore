@@ -9,6 +9,7 @@
 .auth
 **/auth
 **/pi/agent/sessions/**
+shared/.codex/rules/default.rules
 
 # --- Python & Machine Learning ---
 # Ignore local environments used for research

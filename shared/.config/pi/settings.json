@@ -1,0 +1,13 @@
+{
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.5",
+  "skills": [
+    "~/.agents/skills/caveman"
+  ],
+  "enableSkillCommands": true,
+  "extensions": [
+    "~/.config/pi/exit-extension.ts"
+  ],
+  "lastChangelogVersion": "0.74.0",
+  "defaultThinkingLevel": "medium"
+}

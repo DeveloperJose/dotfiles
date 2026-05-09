@@ -8,7 +8,7 @@
       "skillPath": "caveman/SKILL.md",
       "skillFolderHash": "f524c391d466fe35e0bdbe9707854fcb2be52b26",
       "installedAt": "2026-05-05T18:07:18.591Z",
-      "updatedAt": "2026-05-05T18:07:18.591Z"
+      "updatedAt": "2026-05-08T21:43:53.419Z"
     },
     "compress": {
       "source": "JuliusBrussee/caveman",
@@ -26,7 +26,7 @@
       "skillPath": "skills/caveman-commit/SKILL.md",
       "skillFolderHash": "f8d14c8de94e55b43de62b4b3081230248e2f481",
       "installedAt": "2026-05-05T18:07:18.593Z",
-      "updatedAt": "2026-05-05T18:07:18.593Z"
+      "updatedAt": "2026-05-08T21:43:53.420Z"
     },
     "find-skills": {
       "source": "vercel-labs/skills",

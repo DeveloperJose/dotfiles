@@ -16,6 +16,7 @@ for path_entry in $base_paths
     set -gx PATH (string match -v -e $path_entry $PATH)
 end
 set -gx PATH $base_paths $PATH
+set -gx PI_CODING_AGENT_DIR "$HOME/.config/pi"
 
 if status is-interactive
     # Commands to run in interactive sessions can go here
@@ -31,6 +32,8 @@ if status is-interactive
     set -gx LD_LIBRARY_PATH $LD_LIBRARY_PATH /usr/local/cuda/lib64
     set -gx EDITOR nvim
     set -gx TERM screen-256color
+    set -gx LLAMACPP_BASE_URL http://127.0.0.1:8080/v1
+    set -gx LLAMACPP_API_KEY noop
     set --erase DISPLAY
 
     # --- SSH Agent ---

@@ -14,4 +14,5 @@ if [ -n "$NPM_PREFIX" ]; then
   export PATH="$NPM_PREFIX/bin:$PATH"
 fi
 
+export PI_CODING_AGENT_DIR="$HOME/.config/pi"
 export PATH="/opt/nvim/bin:$HOME/.local/bin:$HOME/bin:$PNPM_HOME:$PATH"

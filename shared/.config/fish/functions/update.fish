@@ -16,11 +16,11 @@ function update --description 'Full system update + Llama compilation'
 
     # 4. Compile Llama
     echo "--- Running Local Llama Compilation ---"
-    if test -f ~/local-arch/ai/compile_llama.sh
+    if test -f ~/local-arch/ai/compile-llama.sh
         # We use 'bash' to execute it in case it's not marked executable
-        bash ~/local-arch/ai/compile_llama.sh
+        bash ~/local-arch/ai/compile-llama.sh
     else
-        echo "Warning: compile_llama.sh not found at ~/local-arch/ai/"
+        echo "Warning: compile-llama.sh not found at ~/local-arch/ai/"
     end
 
     # 5. Clean Cache

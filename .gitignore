@@ -9,6 +9,10 @@
 .auth
 **/auth
 **/pi/agent/sessions/**
+**/pi/agent/auth.json
+**/.pi/agent/auth.json
+shared/.config/pi/auth.json
+shared/.config/pi/sessions/
 shared/.codex/rules/default.rules
 
 # --- Python & Machine Learning ---

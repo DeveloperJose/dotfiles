@@ -9,8 +9,7 @@
   "lastChangelogVersion": "0.74.0",
   "defaultThinkingLevel": "medium",
   "packages": [
-    "npm:pi-chatgpt-limit",
-    "npm:pi-llama-cpp"
+    "npm:pi-chatgpt-limit"
   ],
   "terminal": {
     "showTerminalProgress": true

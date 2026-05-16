@@ -5,11 +5,7 @@
     "~/.agents/skills/caveman"
   ],
   "enableSkillCommands": true,
-  "extensions": [
-    "~/.config/pi/exit-extension.ts",
-    "~/.config/pi/agent/extensions/custom-footer.ts",
-    "~/.config/pi/agent/extensions/sandbox"
-  ],
+  "extensions": [],
   "lastChangelogVersion": "0.74.0",
   "defaultThinkingLevel": "medium",
   "packages": [

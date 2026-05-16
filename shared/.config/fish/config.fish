@@ -31,7 +31,11 @@ if status is-interactive
     set -gx DOCKER_BUILDKIT 1
     set -gx LD_LIBRARY_PATH $LD_LIBRARY_PATH /usr/local/cuda/lib64
     set -gx EDITOR nvim
-    set -gx TERM screen-256color
+    # Do not override TERM; TUI apps need terminal-specific capabilities.
+    # Inherit from terminal/tmux instead (xterm-256color, tmux-256color, wezterm, etc.).
+    if not set -q TERM; or test -z "$TERM"
+        set -gx TERM xterm-256color
+    end
     set -gx LLAMACPP_BASE_URL http://127.0.0.1:8080/v1
     set -gx LLAMACPP_API_KEY noop
     set --erase DISPLAY

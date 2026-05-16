@@ -1,0 +1,12 @@
+{
+  "enabled": true,
+  "footer": false,
+  "skills": [
+    {
+      "name": "caveman",
+      "path": "~/.agents/skills/caveman/SKILL.md",
+      "heading": "Default Caveman Skill",
+      "extra": "Caveman communication mode is enabled by default for this session. Use level: full. Follow these instructions unless higher-priority instructions conflict."
+    }
+  ]
+}

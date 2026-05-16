@@ -1,5 +1,5 @@
 approvals_reviewer = "user"
-model = "gpt-5.5"
+model = "gpt-5.4"
 model_reasoning_effort = "medium"
 [projects."/home/ubuntu/local-debian/website"]
 trust_level = "trusted"

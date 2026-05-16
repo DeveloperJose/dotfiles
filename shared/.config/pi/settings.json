@@ -1,13 +1,23 @@
 {
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.5",
+  "defaultProvider": "llama-server",
+  "defaultModel": "unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q4_K_XL",
   "skills": [
     "~/.agents/skills/caveman"
   ],
   "enableSkillCommands": true,
   "extensions": [
-    "~/.config/pi/exit-extension.ts"
+    "~/.config/pi/exit-extension.ts",
+    "~/.config/pi/agent/extensions/custom-footer.ts",
+    "~/.config/pi/agent/extensions/sandbox"
   ],
   "lastChangelogVersion": "0.74.0",
-  "defaultThinkingLevel": "medium"
+  "defaultThinkingLevel": "medium",
+  "packages": [
+    "npm:pi-chatgpt-limit",
+    "npm:pi-llama-cpp"
+  ],
+  "terminal": {
+    "showTerminalProgress": true
+  },
+  "collapseChangelog": false
 }

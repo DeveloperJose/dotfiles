@@ -1,0 +1,4 @@
+/data/README.md
+/data/awbw
+/data/docker
+/data/website

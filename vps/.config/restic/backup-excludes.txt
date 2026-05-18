@@ -1,0 +1,26 @@
+# Top-level transient data
+/data/.pnpm-store/**
+/data/tmp/**
+
+# Generic caches and temp data
+**/.cache/**
+**/__pycache__/**
+**/.pytest_cache/**
+**/.mypy_cache/**
+**/.ruff_cache/**
+**/*.log
+**/tmp/**
+
+# Dependency trees and build output
+**/node_modules/**
+**/vendor/**
+**/target/**
+**/dist/**
+**/build/**
+
+# Tooling state that is easy to recreate
+**/.git/.gitstatus.*
+
+# OS/editor junk
+**/.DS_Store
+**/.Trash-*/**

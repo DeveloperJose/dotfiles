@@ -1,4 +1,5 @@
 /home/devj/dotfiles
+/home/devj/.ssh
 /home/devj/Pictures
 /home/devj/local-arch/architecture
 /home/devj/local-arch/code

@@ -110,9 +110,9 @@ Options:
   --system           Stow system packages into / instead of home packages.
   -h, --help         Show this help.
 
-With no package arguments, packages are selected from the host:
-  shared, plus arch-desktop on arch desktop hosts, arch-laptop on arch laptop
-  hosts, and debian on Debian hosts.
+With no package arguments, stow packages are selected by hostname:
+  arch-desktop gets shared + arch-desktop, vps can get shared + vps if that
+  package exists, and every other host gets shared only.
 
 System packages target / and usually need sudo:
   sudo ./sync.sh --system
@@ -437,7 +437,7 @@ PACKAGES=()
 if ((${#REQUESTED_PACKAGES[@]})); then
     PACKAGES=("${REQUESTED_PACKAGES[@]}")
 elif ((SYSTEM)); then
-    if [[ -f /etc/arch-release && "$HOST" == *desktop* && -d arch-desktop-system ]]; then
+    if [[ -f /etc/arch-release && "$HOST" == "arch-desktop" && -d arch-desktop-system ]]; then
         PACKAGES=("arch-desktop-system")
     else
         echo "No system package selected for host: $HOST" >&2
@@ -446,17 +446,12 @@ elif ((SYSTEM)); then
 else
     PACKAGES=("shared")
 
-    if [[ -f /etc/arch-release ]]; then
-        [[ -d arch-shared ]] && PACKAGES+=("arch-shared")
-        if [[ "$HOST" == *desktop* && -d arch-desktop ]]; then
+    if [[ "$HOST" == "arch-desktop" ]]; then
+        if [[ -d arch-desktop ]]; then
             PACKAGES+=("arch-desktop")
-        elif [[ "$HOST" == *laptop* && -d arch-laptop ]]; then
-            PACKAGES+=("arch-laptop")
         fi
-    fi
-
-    if [[ -f /etc/debian_version && -d debian ]]; then
-        PACKAGES+=("debian")
+    elif [[ "$HOST" == "vps" && -d vps ]]; then
+        PACKAGES+=("vps")
     fi
 fi
 

@@ -1,0 +1,10 @@
+[Unit]
+Description=Run VPS Restic backup on schedule
+
+[Timer]
+OnCalendar=*-*-* 04:15:00
+Persistent=true
+RandomizedDelaySec=30m
+
+[Install]
+WantedBy=timers.target

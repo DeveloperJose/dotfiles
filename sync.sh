@@ -439,6 +439,8 @@ if ((${#REQUESTED_PACKAGES[@]})); then
 elif ((SYSTEM)); then
     if [[ -f /etc/arch-release && "$HOST" == "arch-desktop" && -d arch-desktop-system ]]; then
         PACKAGES=("arch-desktop-system")
+    elif [[ "$HOST" == "vps" && -d vps-system ]]; then
+        PACKAGES=("vps-system")
     else
         echo "No system package selected for host: $HOST" >&2
         exit 1

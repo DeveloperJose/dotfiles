@@ -23,6 +23,8 @@ RETENTION_DAILY="${RESTIC_RETENTION_DAILY:-7}"
 RETENTION_WEEKLY="${RESTIC_RETENTION_WEEKLY:-5}"
 RETENTION_MONTHLY="${RESTIC_RETENTION_MONTHLY:-12}"
 RETENTION_YEARLY="${RESTIC_RETENTION_YEARLY:-3}"
+RESTIC_SFTP_COMMAND="${RESTIC_SFTP_COMMAND:-}"
+RESTIC_SFTP_ARGS="${RESTIC_SFTP_ARGS:-}"
 
 if [[ ! -f "$PATHS_FILE" ]]; then
   echo "Missing Restic paths file: $PATHS_FILE" >&2
@@ -38,9 +40,23 @@ timestamp() {
   date +"%Y-%m-%d %H:%M:%S"
 }
 
+restic_cmd() {
+  local options=()
+
+  if [[ -n "$RESTIC_SFTP_COMMAND" ]]; then
+    options+=(-o "sftp.command=$RESTIC_SFTP_COMMAND")
+  fi
+
+  if [[ -n "$RESTIC_SFTP_ARGS" ]]; then
+    options+=(-o "sftp.args=$RESTIC_SFTP_ARGS")
+  fi
+
+  restic "${options[@]}" "$@"
+}
+
 run_backup() {
   echo "[$(timestamp)] Starting Restic backup"
-  restic backup \
+  restic_cmd backup \
     --files-from "$PATHS_FILE" \
     --exclude-file "$EXCLUDES_FILE" \
     --tag "$HOST_TAG"
@@ -49,7 +65,7 @@ run_backup() {
 
 run_forget() {
   echo "[$(timestamp)] Applying retention policy"
-  restic forget \
+  restic_cmd forget \
     --tag "$HOST_TAG" \
     --keep-daily "$RETENTION_DAILY" \
     --keep-weekly "$RETENTION_WEEKLY" \
@@ -61,7 +77,7 @@ run_forget() {
 
 run_check() {
   echo "[$(timestamp)] Running repository check"
-  restic check
+  restic_cmd check
   echo "[$(timestamp)] Repository check finished"
 }
 

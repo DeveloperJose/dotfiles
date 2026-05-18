@@ -1,0 +1,18 @@
+[Unit]
+Description=Run VPS Restic backup
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/ubuntu
+Environment=HOME=/home/ubuntu
+Environment=RESTIC_ENV_FILE=/home/ubuntu/.config/restic.env
+Environment=XDG_CACHE_HOME=/var/cache/restic-vps
+ExecStart=/home/ubuntu/.local/bin/restic-backup all
+Nice=19
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+
+[Install]
+WantedBy=multi-user.target

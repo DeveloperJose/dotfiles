@@ -42,6 +42,12 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function()
     vim.wo.spell = true
     vim.bo.spelllang = 'en_us'
+    vim.b.ts_highlight = false
+    for k, v in pairs(vim.treesitter.highlighter.active) do
+      if k ~= 0 and k ~= vim.api.nvim_get_current_buf() then
+        vim.treesitter.highlighter.active[k] = nil
+      end
+    end
   end,
 })
 

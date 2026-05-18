@@ -407,9 +407,20 @@ ensure_fish_shell() {
     fi
 }
 
+ensure_nvim() {
+    if [[ -f /etc/arch-release ]]; then
+        install_pacman_packages neovim
+        if [[ -d /opt/nvim ]]; then
+            sudo_cmd rm -rf /opt/nvim
+        fi
+    else
+        install_neovim_latest
+    fi
+}
+
 if ((BOOTSTRAP)); then
     bootstrap_packages
-    install_neovim_latest
+    ensure_nvim
     ensure_pnpm
     ensure_node_cli_tools
     ensure_fish_shell

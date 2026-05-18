@@ -1,0 +1,6 @@
+/home/devj/dotfiles
+/home/devj/Pictures
+/home/devj/local-arch/architecture
+/home/devj/local-arch/code
+/home/devj/local-arch/data
+/home/devj/local-arch/docs

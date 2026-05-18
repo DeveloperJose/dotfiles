@@ -3,6 +3,7 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     branch = 'master',
+    commit = 'cf12346a3414fa1b06af75c79faebe7f76df080a',
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
@@ -13,8 +14,6 @@ return {
         'diff',
         'lua',
         'luadoc',
-        'markdown',
-        'markdown_inline',
         'query',
         'vim',
         'vimdoc',
@@ -33,10 +32,28 @@ return {
       auto_install = true,
       highlight = {
         enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby', 'php' },
+      },
+      textobjects = {
+        select = {
+          enable = true,
+          lookahead = true,
+          keymaps = {
+            ['af'] = '@function.outer',
+            ['if'] = '@function.inner',
+            ['ac'] = '@class.outer',
+            ['ic'] = '@class.inner',
+          },
+        },
+      },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = '<CR>',
+          node_incremental = '<CR>',
+          scope_incremental = '<S-CR>',
+          node_decremental = '<M-CR>',
+        },
       },
       indent = { enable = true, disable = { 'ruby', 'php' } },
     },
@@ -49,6 +66,7 @@ return {
   },
   {
     'nvim-treesitter/nvim-treesitter-context',
+    enabled = false,
     opts = function(_, opts)
       opts = opts or {}
       opts.enable = true

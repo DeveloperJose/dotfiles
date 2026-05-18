@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ENV_FILE="${RESTIC_ENV_FILE:-$HOME/.config/restic.env}"
+
+if [[ ! -f "$ENV_FILE" ]]; then
+  echo "Missing Restic env file: $ENV_FILE" >&2
+  exit 1
+fi
+
+set -a
+# shellcheck disable=SC1090
+source "$ENV_FILE"
+set +a
+
+: "${RESTIC_REPOSITORY:?RESTIC_REPOSITORY is required}"
+: "${RESTIC_PASSWORD_FILE:?RESTIC_PASSWORD_FILE is required}"
+
+PATHS_FILE="${RESTIC_PATHS_FILE:-$HOME/.config/restic/backup-paths.txt}"
+EXCLUDES_FILE="${RESTIC_EXCLUDES_FILE:-$HOME/.config/restic/backup-excludes.txt}"
+HOST_TAG="${RESTIC_HOST_TAG:-$(hostname -s)}"
+RETENTION_DAILY="${RESTIC_RETENTION_DAILY:-7}"
+RETENTION_WEEKLY="${RESTIC_RETENTION_WEEKLY:-5}"
+RETENTION_MONTHLY="${RESTIC_RETENTION_MONTHLY:-12}"
+RETENTION_YEARLY="${RESTIC_RETENTION_YEARLY:-3}"
+
+if [[ ! -f "$PATHS_FILE" ]]; then
+  echo "Missing Restic paths file: $PATHS_FILE" >&2
+  exit 1
+fi
+
+if [[ ! -f "$EXCLUDES_FILE" ]]; then
+  echo "Missing Restic excludes file: $EXCLUDES_FILE" >&2
+  exit 1
+fi
+
+timestamp() {
+  date +"%Y-%m-%d %H:%M:%S"
+}
+
+run_backup() {
+  echo "[$(timestamp)] Starting Restic backup"
+  restic backup \
+    --files-from "$PATHS_FILE" \
+    --exclude-file "$EXCLUDES_FILE" \
+    --tag "$HOST_TAG"
+  echo "[$(timestamp)] Backup finished"
+}
+
+run_forget() {
+  echo "[$(timestamp)] Applying retention policy"
+  restic forget \
+    --tag "$HOST_TAG" \
+    --keep-daily "$RETENTION_DAILY" \
+    --keep-weekly "$RETENTION_WEEKLY" \
+    --keep-monthly "$RETENTION_MONTHLY" \
+    --keep-yearly "$RETENTION_YEARLY" \
+    --prune
+  echo "[$(timestamp)] Retention finished"
+}
+
+run_check() {
+  echo "[$(timestamp)] Running repository check"
+  restic check
+  echo "[$(timestamp)] Repository check finished"
+}
+
+usage() {
+  cat <<'EOF'
+Usage: restic-backup [backup|forget|check|all]
+
+Commands:
+  backup  Run the backup only
+  forget  Apply retention and prune old snapshots
+  check   Run restic check
+  all     Run backup then retention
+EOF
+}
+
+command="${1:-all}"
+
+case "$command" in
+  backup)
+    run_backup
+    ;;
+  forget)
+    run_forget
+    ;;
+  check)
+    run_check
+    ;;
+  all)
+    run_backup
+    run_forget
+    ;;
+  *)
+    usage >&2
+    exit 1
+    ;;
+esac

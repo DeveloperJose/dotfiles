@@ -14,6 +14,7 @@
 shared/.config/pi/auth.json
 shared/.config/pi/sessions/
 shared/.codex/rules/default.rules
+shared/.codex/config.toml
 
 # --- Python & Machine Learning ---
 # Ignore local environments used for research

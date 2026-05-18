@@ -1,0 +1,35 @@
+# Generic caches and temp data
+**/.cache/**
+**/__pycache__/**
+**/.pytest_cache/**
+**/.mypy_cache/**
+**/.ruff_cache/**
+**/*.log
+
+# Dependency trees and frontend build junk
+**/node_modules/**
+**/.pnpm-store/**
+**/.parcel-cache/**
+**/.next/**
+**/.nuxt/**
+**/.svelte-kit/**
+**/.turbo/**
+**/coverage/**
+**/dist/**
+**/build/**
+
+# Virtual environments and compiled build output
+**/.venv/**
+**/venv/**
+**/target/**
+
+# Tooling state that is easy to recreate
+**/.idea/**
+**/.serena/**
+**/.codex/**
+**/.agents/**
+**/.git/.gitstatus.*
+
+# OS/editor junk
+**/.DS_Store
+**/.Trash-*/**

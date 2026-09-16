@@ -15,6 +15,9 @@ shared/.config/pi/auth.json
 shared/.config/pi/sessions/
 shared/.codex/rules/default.rules
 shared/.codex/config.toml
+shared/.config/pi/trust.json
+shared/.config/pi/zentui.json
+arch-desktop/.config/DankMaterialShell/.changelog-1.5
 
 # --- Python & Machine Learning ---
 # Ignore local environments used for research

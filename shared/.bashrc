@@ -16,3 +16,7 @@ fi
 
 export PI_CODING_AGENT_DIR="$HOME/.config/pi"
 export PATH="/opt/nvim/bin:$HOME/.local/bin:$HOME/bin:$PNPM_HOME:$PATH"
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/devj/.local/bin:$PATH"

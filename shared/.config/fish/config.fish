@@ -38,7 +38,9 @@ if status is-interactive
     end
     set -gx LLAMACPP_BASE_URL http://127.0.0.1:8080/v1
     set -gx LLAMACPP_API_KEY noop
-    set --erase DISPLAY
+    if not set -q SSH_CONNECTION; and not set -q DISPLAY
+        set -gx DISPLAY :0
+    end
 
     # --- SSH Agent ---
     set -l ssh_agent_socket "$XDG_RUNTIME_DIR/ssh-agent.socket"
@@ -79,3 +81,12 @@ if status is-interactive
         starship init fish | source
     end
 end
+
+function npm
+    echo "⚠️  Use pnpm instead! (npm is disabled in shell)"
+    echo "   Run: pnpm \$argv"
+    return 1
+end
+
+# Added by Antigravity CLI installer
+set -gx PATH "/home/devj/.local/bin" $PATH

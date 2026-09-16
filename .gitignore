@@ -17,7 +17,12 @@ shared/.codex/rules/default.rules
 shared/.codex/config.toml
 shared/.config/pi/trust.json
 shared/.config/pi/zentui.json
-arch-desktop/.config/DankMaterialShell/.changelog-1.5
+shared/.agents/.skill-lock.json
+shared/.config/opencode/package-lock.json
+arch-desktop/.config/DankMaterialShell/.changelog-*
+arch-desktop/.config/DankMaterialShell/.firstlaunch
+arch-desktop/.config/DankMaterialShell/plugin_settings.json
+arch-desktop/.config/niri/dms/outputs.kdl
 
 # --- Python & Machine Learning ---
 # Ignore local environments used for research

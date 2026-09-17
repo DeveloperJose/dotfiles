@@ -1,6 +1,7 @@
 return {
-    'ggml-org/llama.vim',
-    config = function()
+  'ggml-org/llama.vim',
+  enabled = false,
+  config = function()
 
-    end
+  end,
 }

@@ -32,11 +32,6 @@ return {
       desc = 'Debug (Step Into)',
     },
     {
-      '<leader>du',
-      function() require('dapui').toggle() end,
-      desc = 'Debug (See last session result)',
-    },
-    {
       '<leader>dc',
       function() require('dap').continue() end,
       desc = 'Debug (Continue)',

@@ -1,1 +1,3 @@
-return { 'sh', 'bash', 'zsh' }
+return {
+  filetypes = { 'sh', 'bash', 'zsh' },
+}

@@ -5,7 +5,15 @@ return {
     -- Icons
     require('mini.icons').setup()
     -- Better Around/Inside textobjects
-    require('mini.ai').setup { n_lines = 500 }
+    require('mini.ai').setup {
+      n_lines = 500,
+      mappings = {
+        around_next = '',
+        inside_next = '',
+        around_last = '',
+        inside_last = '',
+      },
+    }
     -- Surround actions
     require('mini.surround').setup()
     -- Autopairs
@@ -24,57 +32,8 @@ return {
     -- Comments
     require('mini.comment').setup()
 
-    -- Autocompletion and signature help
-    local function in_string_or_comment()
-      -- Disabled: old ts_utils removed in nvim-treesitter main
-      return false
-    end
-
-    local function unique_items(items)
-      local seen = {}
-      local result = {}
-      for _, item in ipairs(items) do
-        if not seen[item.label] then
-          seen[item.label] = true
-          table.insert(result, item)
-        end
-      end
-      return result
-    end
-
-    local function process_items(items, base)
-      local filtered = unique_items(items)
-      -- You can also call default processing if you want sorting/fuzzy matching
-      return require('mini.completion').default_process_items(filtered, base)
-    end
-
-    require('mini.completion').setup {
-      delay = { completion = 100, info = 2000, signature = 500 },
-      lsp_completion = {
-        process_items = process_items,
-      },
-      disable = function()
-        return in_string_or_comment()
-      end,
-    }
-
-    -- Tab and Shift-Tab to navigate completion popup menu
-    local imap_expr = function(lhs, rhs)
-      vim.keymap.set('i', lhs, rhs, { expr = true, silent = true })
-    end
-
-    imap_expr('<Tab>', [[pumvisible() ? "\<C-n>" : "\<Tab>"]])
-    imap_expr('<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]])
-
-    -- Custom Enter key: confirm completion with <C-y> if selected, else insert newline
-    _G.cr_action = function()
-      if vim.fn.complete_info()['selected'] ~= -1 then
-        return '\25' -- Ctrl-Y
-      end
-      return '\r'
-    end
-
-    vim.keymap.set('i', '<CR>', 'v:lua.cr_action()', { expr = true, silent = true })
+    -- Autocompletion is handled by blink.cmp; mini.completion disabled to avoid conflicts.
+    -- (Previously mini.completion setup removed.)
 
     -- Simple and easy statusline. We'll remove some sections I don't want to see from it
     local statusline = require 'mini.statusline'

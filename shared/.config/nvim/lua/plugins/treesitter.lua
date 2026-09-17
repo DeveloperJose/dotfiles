@@ -1,40 +1,53 @@
 -- Highlight, edit, and navigate code
+local parsers = {
+  'bash', 'c', 'cpp', 'css', 'html', 'javascript', 'json', 'lua',
+  'luadoc', 'markdown', 'markdown_inline', 'python', 'query',
+  'rust', 'tsx', 'typescript', 'vim', 'vimdoc', 'yaml', 'php',
+  'vue', 'latex', 'diff',
+}
+
 return {
   {
     'nvim-treesitter/nvim-treesitter',
-    branch = 'master',
-    commit = 'cf12346a3414fa1b06af75c79faebe7f76df080a',
+    branch = 'main',
+    lazy = false,
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = {
-        'bash',
-        'c',
-        'diff',
-        'lua',
-        'luadoc',
-        'query',
-        'vim',
-        'vimdoc',
-        'python',
-        'php',
-        'rust',
-        'html',
-        'css',
-        'javascript',
-        'typescript',
-        'tsx',
-        'vue',
-        'latex',
-      },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = { 'ruby', 'php' },
-      },
-      textobjects = {
+    config = function()
+      local ts = require 'nvim-treesitter'
+      -- Custom install dir for clean separation
+      ts.setup {
+        install_dir = vim.fn.stdpath('data') .. '/treesitter',
+      }
+      -- Install parsers (no-op if already installed)
+      ts.install(parsers)
+
+      -- Native highlighting via FileType autocmd
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('treesitter-start', { clear = true }),
+        callback = function(args)
+          local ft = vim.bo[args.buf].filetype
+          local lang = vim.treesitter.language.get_lang(ft)
+          if not lang then
+            return
+          end
+          if vim.treesitter.language.add(lang) then
+            vim.treesitter.start(args.buf, lang)
+            -- Optional indentation (experimental)
+            local has_indent = vim.treesitter.query.get(lang, 'indents') ~= nil
+            if has_indent then
+              vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+            end
+          end
+        end,
+      })
+    end,
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    branch = 'main',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = function()
+      require('nvim-treesitter-textobjects').setup {
         select = {
           enable = true,
           lookahead = true,
@@ -45,28 +58,13 @@ return {
             ['ic'] = '@class.inner',
           },
         },
-      },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = '<CR>',
-          node_incremental = '<CR>',
-          scope_incremental = '<S-CR>',
-          node_decremental = '<M-CR>',
-        },
-      },
-      indent = { enable = true, disable = { 'ruby', 'php' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+      }
+    end,
   },
   {
     'nvim-treesitter/nvim-treesitter-context',
     enabled = false,
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
     opts = function(_, opts)
       opts = opts or {}
       opts.enable = true
@@ -76,25 +74,13 @@ return {
       opts.mode = 'cursor'
       opts.patterns = {
         default = {
-          'function',
-          'method',
-          'for',
-          'while',
-          'if',
-          'switch',
-          'case',
+          'function', 'method', 'for', 'while', 'if', 'switch', 'case',
         },
         rust = {
-          'function_item',
-          'impl_item',
-          'struct_item',
-          'enum_item',
-          'mod_item',
+          'function_item', 'impl_item', 'struct_item', 'enum_item', 'mod_item',
         },
       }
       return opts
     end,
   },
 }
-
--- vim: ts=2 sts=2 sw=2 et

@@ -26,6 +26,10 @@ if status is-interactive
     fish_add_path $HOME/local-arch/ai/llama.cpp/build/bin
     fish_add_path /usr/lib/node_modules/.bin
     fish_add_path $HOME/.cargo/bin
+    fish_add_path -U /opt/cuda/bin
+    set -Ux CUDAToolkit_ROOT /opt/cuda
+    set -Ux CUDA_PATH /opt/cuda
+
     set -gx PATH (string match -v -e /sbin $PATH | string match -v -e /usr/sbin)
 
     set -gx DOCKER_BUILDKIT 1

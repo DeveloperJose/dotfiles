@@ -26,19 +26,7 @@ return {
 
     -- Autocompletion and signature help
     local function in_string_or_comment()
-      local ts_utils = require 'nvim-treesitter.ts_utils'
-      local ok, node = pcall(ts_utils.get_node_at_cursor)
-      if not ok or not node then
-        return false
-      end
-
-      while node do
-        local t = node:type()
-        if t == 'string' or t == 'string_fragment' or t == 'comment' then
-          return true
-        end
-        node = node:parent()
-      end
+      -- Disabled: old ts_utils removed in nvim-treesitter main
       return false
     end
 

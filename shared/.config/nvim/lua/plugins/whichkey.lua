@@ -9,6 +9,11 @@ return { -- Useful plugin to show you pending keybinds.
     delay = 0,
     icons = { mappings = vim.g.have_nerd_font },
 
+    -- Avoid corrupting vim.v.count in Visual mode on Neovim 0.12 (Kickstart PR #2046)
+    triggers = {
+      { '<auto>', mode = 'nisotc' },
+    },
+
     -- Document existing key chains
     spec = {
       { '<leader>d', group = '[D]ebug' },

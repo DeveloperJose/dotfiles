@@ -80,4 +80,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.hl.on_yank() end,
 })
 
+-- Built-in Neovim 0.12 undo tree (optional)
+vim.keymap.set('n', '<leader>u', function()
+  vim.cmd.packadd 'nvim.undotree'
+  vim.cmd.Undotree()
+end, { desc = '[U]ndo tree (built-in)' })
+
 -- vim: ts=2 sts=2 sw=2 et

@@ -21,7 +21,18 @@ return {
       -- Install parsers (no-op if already installed)
       ts.install(parsers)
 
-      -- Native highlighting via FileType autocmd
+      -- Native highlighting via FileType autocmd with async retry
+      local function treesitter_try_attach(buf, language)
+        if not vim.treesitter.language.add(language) then
+          return
+        end
+        vim.treesitter.start(buf, language)
+        local has_indent = vim.treesitter.query.get(language, 'indents') ~= nil
+        if has_indent then
+          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
+      end
+
       vim.api.nvim_create_autocmd('FileType', {
         group = vim.api.nvim_create_augroup('treesitter-start', { clear = true }),
         callback = function(args)
@@ -30,13 +41,16 @@ return {
           if not lang then
             return
           end
-          if vim.treesitter.language.add(lang) then
-            vim.treesitter.start(args.buf, lang)
-            -- Optional indentation (experimental)
-            local has_indent = vim.treesitter.query.get(lang, 'indents') ~= nil
-            if has_indent then
-              vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-            end
+          local installed = require('nvim-treesitter').get_installed 'parsers'
+          local available = require('nvim-treesitter').get_available()
+          if vim.tbl_contains(installed, lang) then
+            treesitter_try_attach(args.buf, lang)
+          elseif vim.tbl_contains(available, lang) then
+            require('nvim-treesitter').install(lang):await(function()
+              treesitter_try_attach(args.buf, lang)
+            end)
+          else
+            treesitter_try_attach(args.buf, lang)
           end
         end,
       })

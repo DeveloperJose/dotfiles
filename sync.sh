@@ -537,3 +537,18 @@ echo "Sync complete."
 if [[ -d "$BACKUP_DIR" ]]; then
     echo "Backups: $BACKUP_DIR"
 fi
+
+sync_nvim_plugins() {
+    local nvim_dir="$DOTFILES_DIR/shared/.config/nvim"
+    if [[ ! -f "$nvim_dir/init.lua" ]]; then
+        echo "nvim config not found at $nvim_dir; skipping plugin sync."
+        return 0
+    fi
+    echo "Running nvim lazy sync..."
+    (cd "$nvim_dir" && nvim --headless -u init.lua -c 'Lazy sync' -c 'qa' 2>/dev/null || true)
+    echo "Running nvim treesitter update..."
+    (cd "$nvim_dir" && nvim --headless -u init.lua -c 'TSUpdate' -c 'qa' 2>/dev/null || true)
+    echo "Running mason-tool-installer..."
+    (cd "$nvim_dir" && nvim --headless -u init.lua -c 'lua require("mason-tool-installer").setup({})' -c 'qa' 2>/dev/null || true)
+    echo "nvim plugin sync complete."
+}

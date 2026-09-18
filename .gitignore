@@ -19,6 +19,7 @@ shared/.config/pi/trust.json
 shared/.config/pi/zentui.json
 shared/.agents/.skill-lock.json
 shared/.config/opencode/package-lock.json
+shared/.config/pi/models-store.json
 arch-desktop/.config/DankMaterialShell/.changelog-*
 arch-desktop/.config/DankMaterialShell/.firstlaunch
 arch-desktop/.config/DankMaterialShell/plugin_settings.json

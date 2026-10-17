@@ -1,5 +1,5 @@
 set -gx PNPM_HOME "$HOME/.local/share/pnpm"
-set -l base_paths /opt/nvim/bin "$HOME/.local/bin" "$HOME/bin"
+set -l base_paths /opt/nvim/bin "$HOME/.local/bin" "$HOME/bin" "$PNPM_HOME/bin"
 for node_bin in $PNPM_HOME/nodejs/*/bin
     if test -d "$node_bin"
         set -a base_paths "$node_bin"

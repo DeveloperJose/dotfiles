@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+ORIGINAL_ARGS=("$@")
+
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_DIR="${DOTFILES_DIR:-$SCRIPT_DIR}"
 TARGET_DIR="${TARGET_DIR:-$HOME}"
@@ -13,7 +15,8 @@ BACKUP=1
 SYSTEM=0
 BOOTSTRAP=1
 REQUESTED_PACKAGES=()
-TREE_SITTER_CLI_VERSION="${TREE_SITTER_CLI_VERSION:-0.25.10}"
+CODEX_CLI_VERSION="${CODEX_CLI_VERSION:-0.149.0}"
+PNPM_HOME="${PNPM_HOME:-$HOME/.local/share/pnpm}"
 
 # One shared recovery list for every distro. Names are translated per package
 # manager only where distributions disagree.
@@ -33,6 +36,7 @@ SHARED_PACKAGES=(
     stow       # Dotfile symlink manager.
     tmux       # Terminal multiplexer.
     tree       # Directory tree viewer.
+    tree-sitter-cli  # Parser generator required by Neovim tooling.
     unzip      # Zip archive extraction.
     wget       # Downloader used by some installers.
 )
@@ -160,6 +164,29 @@ while (($#)); do
     shift
 done
 
+if ! command -v git >/dev/null 2>&1; then
+    echo "Git is required to check and update the dotfiles checkout." >&2
+    exit 1
+fi
+
+repo_status="$(git -C "$DOTFILES_DIR" status --short --untracked-files=normal)"
+if [[ -n "$repo_status" ]]; then
+    echo "Uncommitted changes found in $DOTFILES_DIR:" >&2
+    printf '%s\n' "$repo_status" >&2
+    echo "Commit, stash, or move these changes before running sync.sh. Nothing has been applied." >&2
+    exit 1
+fi
+
+if ((DRY_RUN)); then
+    echo "DRY-RUN: would run git pull --ff-only before syncing."
+elif [[ "${DOTFILES_SYNC_UPDATED:-0}" != 1 ]]; then
+    echo "Updating dotfiles with git pull --ff-only..."
+    git -C "$DOTFILES_DIR" pull --ff-only
+    # Reload the script so this run uses any updates pulled above.
+    exec env DOTFILES_SYNC_UPDATED=1 bash "$SCRIPT_DIR/$(basename -- "${BASH_SOURCE[0]}")" "${ORIGINAL_ARGS[@]}"
+fi
+unset DOTFILES_SYNC_UPDATED
+
 run_cmd() {
     if ((DRY_RUN)); then
         printf 'DRY-RUN:'
@@ -179,6 +206,12 @@ sudo_cmd() {
         echo "sudo is required to run: $*" >&2
         return 1
     fi
+}
+
+configure_pnpm_home() {
+    export PNPM_HOME
+    export PATH="$PNPM_HOME/bin:$PATH"
+    run_cmd mkdir -p "$PNPM_HOME/bin"
 }
 
 arch_package_name() {
@@ -283,6 +316,8 @@ install_aur_packages() {
 }
 
 ensure_pnpm() {
+    configure_pnpm_home
+
     if command -v pnpm >/dev/null 2>&1; then
         return 0
     fi
@@ -293,21 +328,23 @@ ensure_pnpm() {
     fi
 
     if [[ -f /etc/debian_version ]]; then
-        install_debian_packages nodejs npm
-        run_cmd npm install -g pnpm
-        return 0
+        echo "pnpm is required. Install it with the official standalone installer, then re-run sync.sh:" >&2
+        echo "  curl -fsSL https://get.pnpm.io/install.sh | sh -" >&2
+        return 1
     fi
 
     echo "pnpm is not installed and no installer is configured for this distro." >&2
 }
 
 ensure_node_cli_tools() {
-    if ! command -v npm >/dev/null 2>&1; then
-        echo "npm is not installed; cannot install Node-based CLI tools." >&2
+    if ! command -v pnpm >/dev/null 2>&1; then
+        echo "pnpm is not installed; cannot install Node-based CLI tools." >&2
         return 1
     fi
 
-    run_cmd npm install -g pnpm "tree-sitter-cli@$TREE_SITTER_CLI_VERSION"
+    # Do not pass --allow-build. pnpm will ask for an explicit approval if a
+    # package needs an install script, and records that decision separately.
+    run_cmd pnpm add --global "@openai/codex@$CODEX_CLI_VERSION"
 }
 
 neovim_release_arch() {
@@ -532,23 +569,35 @@ for pkg in "${PACKAGES[@]}"; do
     fi
 done
 
+sync_nvim_plugins() {
+    local nvim_dir="$TARGET_DIR/.config/nvim"
+    if ((DRY_RUN)); then
+        echo "DRY-RUN: would restore Neovim plugins from $nvim_dir/lazy-lock.json."
+        return
+    fi
+    if ! command -v nvim >/dev/null 2>&1; then
+        echo "Neovim is required to restore plugins. Install it or re-run without --no-bootstrap." >&2
+        return 1
+    fi
+    if [[ ! -f "$nvim_dir/init.lua" || ! -f "$nvim_dir/lazy-lock.json" ]]; then
+        echo "Neovim config or lockfile missing in $nvim_dir; cannot restore plugins." >&2
+        return 1
+    fi
+    echo "Restoring Neovim plugins from lazy-lock.json..."
+    run_cmd env XDG_CONFIG_HOME="$TARGET_DIR/.config" nvim --headless -u "$nvim_dir/init.lua" '+Lazy! restore' +qa
+}
+
+if ((!SYSTEM)); then
+    for pkg in "${PACKAGES[@]}"; do
+        if [[ "$pkg" == shared ]]; then
+            sync_nvim_plugins
+            break
+        fi
+    done
+fi
+
 echo
 echo "Sync complete."
 if [[ -d "$BACKUP_DIR" ]]; then
     echo "Backups: $BACKUP_DIR"
 fi
-
-sync_nvim_plugins() {
-    local nvim_dir="$DOTFILES_DIR/shared/.config/nvim"
-    if [[ ! -f "$nvim_dir/init.lua" ]]; then
-        echo "nvim config not found at $nvim_dir; skipping plugin sync."
-        return 0
-    fi
-    echo "Running nvim lazy sync..."
-    (cd "$nvim_dir" && nvim --headless -u init.lua -c 'Lazy sync' -c 'qa' 2>/dev/null || true)
-    echo "Running nvim treesitter update..."
-    (cd "$nvim_dir" && nvim --headless -u init.lua -c 'TSUpdate' -c 'qa' 2>/dev/null || true)
-    echo "Running mason-tool-installer..."
-    (cd "$nvim_dir" && nvim --headless -u init.lua -c 'lua require("mason-tool-installer").setup({})' -c 'qa' 2>/dev/null || true)
-    echo "nvim plugin sync complete."
-}

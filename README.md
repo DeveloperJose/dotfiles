@@ -13,6 +13,17 @@ git clone git@github.com:DeveloperJose/dotfiles.git ~/dotfiles && cd ~/dotfiles 
 The bootstrap is safe to re-run. It installs the recovery package set, makes
 Fish the login shell, and restows the matching package folders.
 
+Before making changes, `sync.sh` stops and lists any uncommitted changes
+(including untracked files). With a clean checkout, it runs `git pull --ff-only`
+and reloads the updated script before proceeding. A failed pull stops the sync.
+`--dry-run` checks for local changes but skips the pull.
+
+After stowing `shared`, home syncs run `Lazy! restore` in headless Neovim to
+apply the versions in `lazy-lock.json`. Restore failures stop the sync and
+remain visible. System syncs skip this step; dry runs only print it.
+To upgrade plugins deliberately, run `:Lazy update`, test, and commit the
+updated lockfile.
+
 Useful modes:
 
 ```bash

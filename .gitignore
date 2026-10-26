@@ -65,3 +65,8 @@ shared/.config/nvim/spell/*.spl
 
 # Local Pi bridge credential
 shared/.config/pi/bridge-token
+
+# Generated application manifests and user-service state
+shared/.config/opencode/package.json
+shared/.config/systemd/user/codex-remote-control.service
+**/.config/systemd/user/*.wants/

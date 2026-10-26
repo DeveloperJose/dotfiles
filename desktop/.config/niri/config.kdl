@@ -87,6 +87,7 @@ overview {
 environment {
   XDG_CURRENT_DESKTOP "niri"
   PATH "/home/devj/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/home/devj/.local/bin:/usr/local/bin:/usr/bin"
+  XDG_DATA_DIRS "/home/devj/.nix-profile/share:/nix/var/nix/profiles/default/share:/usr/local/share:/usr/share"
 }
 hotkey-overlay {
     skip-at-startup

@@ -72,15 +72,17 @@ if status is-interactive
         end
     end
 
-    for key in ~/.ssh/*
-        if test -f "$key"
-            and not string match -q "*.pub" "$key"
-            and not string match -q ".pub" (string sub -l 4 (basename "$key"))
-            and not string match -q "known_hosts*" "$key"
-            and not string match -q "config" "$key"
-            set -l key_fp (ssh-keygen -lf "$key" 2>/dev/null | awk '{print $2}')
-            if not ssh-add -l 2>/dev/null | grep -q "$key_fp"
-                ssh-add "$key" 2>/dev/null
+    if not set -q SSH_CONNECTION
+        for key in ~/.ssh/*
+            if test -f "$key"
+                and not string match -q "*.pub" "$key"
+                and not string match -q ".pub" (string sub -l 4 (basename "$key"))
+                and not string match -q "known_hosts*" "$key"
+                and not string match -q "config" "$key"
+                set -l key_fp (ssh-keygen -lf "$key" 2>/dev/null | awk '{print $2}')
+                if not ssh-add -l 2>/dev/null | grep -q "$key_fp"
+                    ssh-add "$key" 2>/dev/null
+                end
             end
         end
     end

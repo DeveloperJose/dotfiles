@@ -1,0 +1,6 @@
+# Preserved desktop recovery packages from the previous sync.sh.
+cpptrace                # Runtime library needed by quickshell on this setup.
+dsearch-bin             # Dank filesystem search service.
+greetd-dms-greeter-git  # DMS greeter for greetd.
+quickshell-git          # QtQuick shell runtime used by DMS.
+qt6ct-kde               # Qt6 config tool variant expected by DMS.

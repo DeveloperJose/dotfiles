@@ -70,3 +70,6 @@ shared/.config/pi/bridge-token
 shared/.config/opencode/package.json
 shared/.config/systemd/user/codex-remote-control.service
 **/.config/systemd/user/*.wants/
+
+# Nix build output and GC root for the system-file bundle
+/result-system

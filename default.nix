@@ -29,7 +29,12 @@ in {
       fi
       install -D --backup=numbered -m "$mode" "$file" "$target"
     done < <(find . -type f -print0)
-    ${if host == "vps" then "/usr/bin/systemctl daemon-reload" else
+    ${if host == "vps" then ''
+      /usr/bin/systemctl daemon-reload
+      if test -L /etc/systemd/system/timers.target.wants/restic-backup-vps.timer; then
+        /usr/bin/systemctl enable --force --now restic-backup-vps.timer
+      fi
+    '' else
       "echo 'sudo grub-mkconfig -o /boot/grub/grub.cfg'"}
   '';
 }

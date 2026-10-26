@@ -1,18 +1,18 @@
 { config, lib, pkgs, host, ... }:
 let
-  common = {
-    ".agents" = "common/.agents";
-    ".bashrc" = "common/.bashrc";
-    ".gitconfig" = "common/.gitconfig";
-    ".tmux.conf" = "common/.tmux.conf";
-    ".config/fish" = "common/.config/fish";
-    ".config/nvim" = "common/.config/nvim";
-    ".config/opencode" = "common/.config/opencode";
-    ".config/pi" = "common/.config/pi";
-    ".config/restic.env.example" = "common/.config/restic.env.example";
-    ".config/starship.toml" = "common/.config/starship.toml";
-    ".config/systemd" = "common/.config/systemd";
-    ".local/bin/restic-backup" = "common/.local/bin/restic-backup";
+  shared = {
+    ".agents" = "shared/.agents";
+    ".bashrc" = "shared/.bashrc";
+    ".gitconfig" = "shared/.gitconfig";
+    ".tmux.conf" = "shared/.tmux.conf";
+    ".config/fish" = "shared/.config/fish";
+    ".config/nvim" = "shared/.config/nvim";
+    ".config/opencode" = "shared/.config/opencode";
+    ".config/pi" = "shared/.config/pi";
+    ".config/restic.env.example" = "shared/.config/restic.env.example";
+    ".config/starship.toml" = "shared/.config/starship.toml";
+    ".config/systemd" = "shared/.config/systemd";
+    ".local/bin/restic-backup" = "shared/.local/bin/restic-backup";
   };
   extra = lib.optionalAttrs (host != "laptop") {
     ".config/restic" = "${host}/.config/restic";
@@ -39,6 +39,6 @@ in {
 
   home.file = lib.mapAttrs (_: relative: {
     source = config.lib.file.mkOutOfStoreSymlink
-      "${config.home.homeDirectory}/dotfiles/config/${relative}";
-  }) (common // extra);
+      "${config.home.homeDirectory}/dotfiles/${relative}";
+  }) (shared // extra);
 }

@@ -10,7 +10,7 @@ let
     configuration = ./home.nix;
     extraSpecialArgs = { inherit host; };
   };
-  systemFiles = ./config + "/${host}/system";
+  systemFiles = ./. + "/${host}/system";
 in {
   home = home.activationPackage;
   config = home.config;

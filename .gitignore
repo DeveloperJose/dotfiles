@@ -62,3 +62,6 @@ shared/.config/nvim/spell/*.spl
 .cache/
 .npm/
 .nv/
+
+# Local Pi bridge credential
+shared/.config/pi/bridge-token

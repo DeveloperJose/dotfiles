@@ -1,5 +1,5 @@
 set -gx PNPM_HOME "$HOME/.local/share/pnpm"
-set -l base_paths /opt/nvim/bin "$HOME/.local/bin" "$HOME/bin" "$PNPM_HOME/bin"
+set -l base_paths "$HOME/.local/bin" "$HOME/bin" "$PNPM_HOME/bin"
 for node_bin in $PNPM_HOME/nodejs/*/bin
     if test -d "$node_bin"
         set -a base_paths "$node_bin"
@@ -107,6 +107,6 @@ if set -q XDG_STATE_HOME; and test -n "$XDG_STATE_HOME"
 end
 for nix_bin in /nix/var/nix/profiles/default/bin "$HOME/.nix-profile/bin" "$nix_state_home/nix/profile/bin"
     if test -d "$nix_bin"
-        fish_add_path --path --prepend "$nix_bin"
+        fish_add_path --path --prepend --move "$nix_bin"
     end
 end

@@ -14,7 +14,9 @@ let
     ".config/systemd" = "shared/.config/systemd";
     ".local/bin/restic-backup" = "shared/.local/bin/restic-backup";
   };
-  extra = lib.optionalAttrs (host != "laptop") {
+  extra = lib.optionalAttrs (host != "desktop") {
+    ".config/environment.d/10-nix.conf" = "shared/.config/environment.d/10-nix.conf";
+  } // lib.optionalAttrs (host != "laptop") {
     ".config/restic" = "${host}/.config/restic";
     ".ssh/config" = "${host}/.ssh/config";
   } // lib.optionalAttrs (host == "desktop") {

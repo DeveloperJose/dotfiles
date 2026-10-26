@@ -86,6 +86,7 @@ overview {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 environment {
   XDG_CURRENT_DESKTOP "niri"
+  PATH "/home/devj/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/home/devj/.local/bin:/usr/local/bin:/usr/bin"
 }
 hotkey-overlay {
     skip-at-startup

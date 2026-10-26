@@ -18,11 +18,7 @@ export PI_CODING_AGENT_DIR="$HOME/.config/pi"
 export PATH="/opt/nvim/bin:$HOME/.local/bin:$HOME/bin:$PNPM_HOME/bin:$PNPM_HOME:$PATH"
 
 
-# Added by Antigravity CLI installer
-export PATH="/home/devj/.local/bin:$PATH"
 
-# Load Nix without installer edits to this shared file. Its tools take
-# precedence over older native or /opt copies during the migration.
 if [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
   . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 elif [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then

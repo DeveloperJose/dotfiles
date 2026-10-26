@@ -18,7 +18,6 @@ end
 set -gx PATH $base_paths $PATH
 set -gx PI_CODING_AGENT_DIR "$HOME/.config/pi"
 
-# Initialize Nix before interactive commands such as starship and fastfetch.
 if not set -q __ETC_PROFILE_NIX_SOURCED
     if test -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
         source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
@@ -101,10 +100,7 @@ function npm
     return 1
 end
 
-# Added by Antigravity CLI installer
-set -gx PATH "/home/devj/.local/bin" $PATH
 
-# Keep Nix tools ahead of the legacy PATH entries above.
 set -l nix_state_home "$HOME/.local/state"
 if set -q XDG_STATE_HOME; and test -n "$XDG_STATE_HOME"
     set nix_state_home "$XDG_STATE_HOME"

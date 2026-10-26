@@ -1,9 +1,3 @@
-# ==============================================================================
-# DOTFILES .GITIGNORE
-# ==============================================================================
-
-# --- Secrets & Credentials ---
-# Never track environment variables or authentication tokens
 .env
 .env.*
 .auth
@@ -11,65 +5,41 @@
 **/pi/agent/sessions/**
 **/pi/agent/auth.json
 **/.pi/agent/auth.json
-shared/.config/pi/auth.json
-shared/.config/pi/sessions/
-shared/.codex/rules/default.rules
-shared/.codex/config.toml
-shared/.config/pi/trust.json
-shared/.config/pi/zentui.json
-shared/.agents/.skill-lock.json
-shared/.config/opencode/package-lock.json
-shared/.config/pi/models-store.json
-arch-desktop/.config/DankMaterialShell/.changelog-*
-arch-desktop/.config/DankMaterialShell/.firstlaunch
-arch-desktop/.config/DankMaterialShell/plugin_settings.json
-arch-desktop/.config/niri/dms/outputs.kdl
-
-# --- Python & Machine Learning ---
-# Ignore local environments used for research
+config/common/.config/pi/auth.json
+config/common/.config/pi/sessions/
+config/common/.codex/rules/default.rules
+config/common/.codex/config.toml
+config/common/.config/pi/trust.json
+config/common/.config/pi/zentui.json
+config/common/.agents/.skill-lock.json
+config/common/.config/opencode/package-lock.json
+config/common/.config/pi/models-store.json
+config/desktop/.config/DankMaterialShell/.changelog-*
+config/desktop/.config/DankMaterialShell/.firstlaunch
+config/desktop/.config/DankMaterialShell/plugin_settings.json
+config/desktop/.config/niri/dms/outputs.kdl
 **/venv/
 **/.venv/
 __pycache__/
 *.py[cod]
 *$py.class
-
-# --- JavaScript / TypeScript (Bun & Node) ---
-# Dependencies and lockfiles (usually kept local or regenerated)
 node_modules/
 bun.lock
 .bun-build/
-
-# --- Text Editor Debris (Neovim/Vim) ---
-# Swap files, undo history, and binary spell files
 *.swp
 *.swo
 undo/
-shared/.config/nvim/undo/
-shared/.config/nvim/spell/*.spl
-
-# Generated shell state
+config/common/.config/nvim/undo/
+config/common/.config/nvim/spell/*.spl
 **/fish_variables
-
-# --- System & OS Logs ---
-# Keep the repo clean of logs and OS-specific metadata
 *.log
 **/logs/
 .DS_Store
 .wget-hsts
-
-# --- Technical Stack Specifics ---
-# Local database or temporary build artifacts
 .cache/
 .npm/
 .nv/
-
-# Local Pi bridge credential
-shared/.config/pi/bridge-token
-
-# Generated application manifests and user-service state
-shared/.config/opencode/package.json
-shared/.config/systemd/user/codex-remote-control.service
+config/common/.config/pi/bridge-token
+config/common/.config/opencode/package.json
+config/common/.config/systemd/user/codex-remote-control.service
 **/.config/systemd/user/*.wants/
-
-# Nix build output and GC root for the system-file bundle
-/result-system

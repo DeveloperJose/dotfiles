@@ -1,7 +1,6 @@
 { config, lib, pkgs, host, ... }:
 let
   shared = {
-    ".agents" = "shared/.agents";
     ".bashrc" = "shared/.bashrc";
     ".gitconfig" = "shared/.gitconfig";
     ".tmux.conf" = "shared/.tmux.conf";
@@ -37,7 +36,7 @@ in {
   home.packages = with pkgs; [
     fastfetch fd git htop jq lazygit less neovim ripgrep rsync
     starship tmux tree tree-sitter unzip wget zoxide
-  ];
+  ] ++ lib.optionals (host == "desktop") [ blender ];
 
   home.file = lib.mapAttrs (_: relative: {
     source = config.lib.file.mkOutOfStoreSymlink

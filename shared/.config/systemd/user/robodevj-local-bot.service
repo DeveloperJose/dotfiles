@@ -1,0 +1,27 @@
+[Unit]
+Description=RoboDevJ local AWBW opponent
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=1800
+StartLimitBurst=3
+
+[Service]
+Type=simple
+WorkingDirectory=%h/local-arch/code/RoboDevJ
+EnvironmentFile=%h/.config/robodevj/local-bot.env
+LoadCredential=awbw_password:%h/.config/robodevj/awbw-password
+Environment=AWBW_BOT_PASSWORD_FILE=%d/awbw_password
+Environment=PYTHONUNBUFFERED=1
+Environment=UV_NO_SYNC=1
+Environment=OMP_NUM_THREADS=1
+Environment=MKL_NUM_THREADS=1
+Environment=PYTHONPATH=/home/devj/local-arch/code/RoboDevJ/python:/home/devj/local-arch/code/RoboDevJ
+ExecStart=%h/local-arch/code/RoboDevJ/.venv/bin/python scripts/run_site_bot.py ${ROBODEVJ_CHECKPOINT} $ROBODEVJ_BOT_ARGS
+Restart=on-failure
+RestartSec=300
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

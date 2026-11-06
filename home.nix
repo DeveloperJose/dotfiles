@@ -1,4 +1,4 @@
-{ config, lib, pkgs, host, ... }:
+{ config, lib, pkgs, blenderBin, host, ... }:
 let
   shared = {
     ".bashrc" = "shared/.bashrc";
@@ -36,7 +36,7 @@ in {
   home.packages = with pkgs; [
     fastfetch fd git htop jq lazygit less neovim ripgrep rsync
     starship tmux tree tree-sitter unzip wget zoxide
-  ] ++ lib.optionals (host == "desktop") [ blender ];
+  ] ++ lib.optionals (host == "desktop") [ blenderBin ];
 
   home.file = lib.mapAttrs (_: relative: {
     source = config.lib.file.mkOutOfStoreSymlink

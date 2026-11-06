@@ -41,7 +41,7 @@ if status is-interactive
     set -gx PATH (string match -v -e /sbin $PATH | string match -v -e /usr/sbin)
 
     set -gx DOCKER_BUILDKIT 1
-    set -gx LD_LIBRARY_PATH $LD_LIBRARY_PATH /usr/local/cuda/lib64
+    set -gx LD_LIBRARY_PATH $LD_LIBRARY_PATH /opt/cuda/lib64
     set -gx EDITOR nvim
     # Do not override TERM; TUI apps need terminal-specific capabilities.
     # Inherit from terminal/tmux instead (xterm-256color, tmux-256color, wezterm, etc.).

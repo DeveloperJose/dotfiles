@@ -2,13 +2,18 @@
 assert builtins.elem host [ "laptop" "desktop" "vps" ];
 let
   sources = import ./sources.nix;
+  system = if host == "vps" then "aarch64-linux" else "x86_64-linux";
   pkgs = import sources.nixpkgs {
-    system = if host == "vps" then "aarch64-linux" else "x86_64-linux";
+    inherit system;
   };
+  blenderBin =
+    if host == "desktop"
+    then pkgs.callPackage ./blender-bin.nix { }
+    else pkgs.emptyFile;
   home = import "${sources.home-manager}/modules" {
     inherit pkgs;
     configuration = ./home.nix;
-    extraSpecialArgs = { inherit host; };
+    extraSpecialArgs = { inherit host blenderBin; };
   };
   systemFiles = ./. + "/${host}/system";
 in {
